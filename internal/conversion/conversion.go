@@ -108,3 +108,25 @@ func findUpperRight(matrix [][]bool) *types.Point {
 	}
 	return &types.Point{X: -1, Y: -1}
 }
+
+func ResizeMatrix(matrix [][]bool, desiredSize int) [][]bool {
+	// find pixel size
+	size, err := findPixelSize(matrix)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("pixel size is", size)
+
+	// ??? come up with a conversion algorithm
+
+	return make([][]bool, 0)
+}
+
+func findPixelSize(matrix [][]bool) (int, error) {
+	for x := range matrix {
+		if !matrix[x][x] {
+			return x + 1, nil
+		}
+	}
+	return -1, fmt.Errorf("image is all 1s")
+}
