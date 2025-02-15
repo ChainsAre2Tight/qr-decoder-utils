@@ -43,6 +43,6 @@ func main() {
 	// convert to matrix
 	matrix := conversion.ImageToMartix(qr)
 
-	// output to .xlsx
+	// output to selected format
 	outputFunction(matrix, *outputFilenamePtr)
 }
