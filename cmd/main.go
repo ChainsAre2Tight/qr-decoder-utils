@@ -4,9 +4,8 @@ import (
 	"flag"
 	"log"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/conversion"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/detection"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/input"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
 )
 
 func main() {
@@ -18,27 +17,48 @@ func main() {
 
 	log.Println("Reading from", *inputFilenamePtr, "and writting to", *outputFilenamePtr)
 
-	var outputFunction func([][]bool, *string)
+	// var outputFunction func([][]bool, *string)
 	switch *outputModePtr {
 	case "excel":
 		log.Println("output is set as an excel spreadsheet")
-		outputFunction = output.MatrixToExcel
+		// outputFunction = output.MatrixToExcel
 	case "image":
 		log.Println("output is set as an image")
-		outputFunction = output.MatrixToImage
+		// outputFunction = output.MatrixToImage
 	default:
 		log.Fatal("unknown mode: ", *outputModePtr)
 	}
 
 	// load image
-	image := input.ReadImage(*inputFilenamePtr)
+	img := input.ReadImage(*inputFilenamePtr)
+	border, err := detection.DetectQR(img)
+	if err != nil {
+		log.Fatal(err)
+	}
+	cropped, err := detection.CropFields(img, border)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pixelSize, err := detection.DetectPixelSize(cropped)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// convert to matrix
-	matrix := conversion.ImageToMartix(image)
-	// strip fields
-	strippedMatrix := conversion.StripFields(matrix)
-	outputFunction(strippedMatrix, outputFilenamePtr)
-	// resize
-	_ = conversion.ResizeMatrix(strippedMatrix, 21)
-	// output to .xlsx
+	log.Println("pizel size is ", pixelSize)
+	// detection.Wrtout(cropped, image.Point{pixelSize, pixelSize})
+
+	newDimensions := detection.CalculateNewDimensions(cropped, pixelSize)
+	log.Println("Converting to QR of size ", newDimensions)
+
+	resized := detection.Resize(cropped, newDimensions)
+	detection.Wrtout(resized)
+
+	// // convert to matrix
+	// matrix := conversion.ImageToMartix(image)
+	// // strip fields
+	// strippedMatrix := conversion.StripFields(matrix)
+	// outputFunction(strippedMatrix, outputFilenamePtr)
+	// // resize
+	// _ = conversion.ResizeMatrix(strippedMatrix, 21)
+	// // output to .xlsx
 }
