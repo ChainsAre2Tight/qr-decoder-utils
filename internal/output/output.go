@@ -25,7 +25,8 @@ func MatrixToImage(matrix [][]bool, filepath string) {
 		}
 	}
 
-	file, err := os.Create(filepath)
+	name := utils.Concat(filepath, ".png")
+	file, err := os.Create(name)
 
 	if err != nil {
 		log.Fatal(err)
