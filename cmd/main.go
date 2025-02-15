@@ -14,7 +14,7 @@ func main() {
 	// parse arguments
 	inputFilenamePtr := flag.String("input", "./image.png", "specifies an image file to parse")
 	outputFilenamePtr := flag.String("output", "./result", "specifies an output file name")
-	outputModePtr := flag.String("mode", "excel", "specifies output mode, can be excel or image")
+	outputModePtr := flag.String("mode", "none", "specifies output mode, can be excel, image or value")
 	flag.Parse()
 
 	log.Println("Reading from", *inputFilenamePtr, "and writting to", *outputFilenamePtr)
@@ -27,6 +27,9 @@ func main() {
 	case "image":
 		log.Println("output is set as an image")
 		outputFunction = output.MatrixToImage
+	case "value":
+		log.Println("will attempt to decode")
+		outputFunction = output.MatrixToValue
 	default:
 		log.Fatal("unknown mode: ", *outputModePtr)
 	}
