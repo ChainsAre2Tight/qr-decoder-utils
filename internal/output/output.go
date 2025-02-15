@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func MatrixToImage(matrix [][]bool, filepath *string) {
+func MatrixToImage(matrix [][]bool, filepath string) {
 	upperLeft, lowerRight := image.Point{0, 0}, image.Point{len(matrix), len(matrix[0])}
 	img := image.NewGray(image.Rectangle{upperLeft, lowerRight})
 
@@ -21,13 +21,17 @@ func MatrixToImage(matrix [][]bool, filepath *string) {
 			}
 		}
 	}
-	file, err := os.Create(*filepath)
+
+	file, err := os.Create(filepath)
+
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer file.Close()
+	log.Println("Writting result to", filepath)
 	png.Encode(file, img)
 }
 
-func MatrixToExcel(matrix [][]bool, filepath *string) {
+func MatrixToExcel(matrix [][]bool, filepath string) {
 	log.Fatal("not imlemented: excel")
 }

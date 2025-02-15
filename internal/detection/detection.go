@@ -4,15 +4,36 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"image/png"
 	"log"
 	"math"
-	"os"
 
 	"golang.org/x/image/draw"
 )
 
-func DetectQR(img image.Image) (image.Rectangle, error) {
+func DetectQR(img image.Image) (image.Image, error) {
+	border, err := detectBorders(img)
+	if err != nil {
+		return image.Black, err
+	}
+	cropped, err := cropFields(img, border)
+	if err != nil {
+		return image.Black, err
+	}
+	pixelSize, err := detectPixelSize(cropped)
+	if err != nil {
+		return image.Black, err
+	}
+
+	log.Println("pizel size is ", pixelSize)
+
+	newDimensions := calculateNewDimensions(cropped, pixelSize)
+	log.Println("Converting to QR of size ", newDimensions)
+
+	resized := resize(cropped, newDimensions)
+	return resized, nil
+}
+
+func detectBorders(img image.Image) (image.Rectangle, error) {
 	// detect upper left
 	ul, err := detectUpperLeft(img)
 	if err != nil {
@@ -34,7 +55,7 @@ func DetectQR(img image.Image) (image.Rectangle, error) {
 	return image.Rectangle{Min: ul, Max: image.Point{X: ur.X, Y: ll.Y}}, nil
 }
 
-func CropFields(img image.Image, border image.Rectangle) (image.Image, error) {
+func cropFields(img image.Image, border image.Rectangle) (image.Image, error) {
 	type subImager interface {
 		SubImage(r image.Rectangle) image.Image
 	}
@@ -47,7 +68,7 @@ func CropFields(img image.Image, border image.Rectangle) (image.Image, error) {
 	return simg.SubImage(border), nil
 }
 
-func DetectPixelSize(img image.Image) (int, error) {
+func detectPixelSize(img image.Image) (int, error) {
 	bounds := img.Bounds()
 
 	for d := 0; d < bounds.Max.X-5 && d < bounds.Max.Y-5; d++ {
@@ -66,35 +87,16 @@ func DetectPixelSize(img image.Image) (int, error) {
 	return -1, fmt.Errorf("no pixel size detected")
 }
 
-func CalculateNewDimensions(img image.Image, pixelSize int) int {
+func calculateNewDimensions(img image.Image, pixelSize int) int {
 	bounds := img.Bounds()
 	result := int(math.Ceil(float64(bounds.Dx()) / float64(pixelSize)))
 	return result
 }
 
-func Resize(img image.Image, newDimensions int) image.Image {
+func resize(img image.Image, newDimensions int) image.Image {
 	result := image.NewRGBA(image.Rect(0, 0, newDimensions, newDimensions))
 	draw.NearestNeighbor.Scale(result, result.Rect, img, img.Bounds(), draw.Over, nil)
 	return result
-}
-
-func Wrtout(img image.Image) {
-	bounds := img.Bounds()
-	img2 := image.NewNRGBA(bounds)
-
-	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
-		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-
-			img2.Set(x, y, img.At(x, y))
-
-		}
-	}
-
-	file, err := os.Create("./data/result2.png")
-	if err != nil {
-		log.Fatal(err)
-	}
-	png.Encode(file, img2)
 }
 
 func isCorner(value int) bool {
