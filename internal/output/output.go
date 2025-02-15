@@ -6,6 +6,9 @@ import (
 	"image/png"
 	"log"
 	"os"
+
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
+	"github.com/tealeg/xlsx"
 )
 
 func MatrixToImage(matrix [][]bool, filepath string) {
@@ -33,5 +36,38 @@ func MatrixToImage(matrix [][]bool, filepath string) {
 }
 
 func MatrixToExcel(matrix [][]bool, filepath string) {
-	log.Fatal("not imlemented: excel")
+	name := utils.Concat(filepath, ".xlsx")
+
+	file := xlsx.NewFile()
+	sheet, err := file.AddSheet("QR 1")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	sheet.SetColWidth(0, len(matrix)-1, 2)
+
+	BLACK := xlsx.NewStyle()
+	BLACK.Fill = *xlsx.NewFill("solid", "0000000", "00000000")
+	BLACK.ApplyFill = true
+
+	for y := range matrix[0] {
+		row := sheet.AddRow()
+
+		for x := range matrix {
+			cell := row.AddCell()
+			if matrix[x][y] {
+				cell.SetInt(1)
+				cell.SetStyle(BLACK)
+
+			} else {
+				cell.SetInt(0)
+			}
+		}
+	}
+
+	log.Println("writting excel to", name)
+	err = file.Save(name)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
