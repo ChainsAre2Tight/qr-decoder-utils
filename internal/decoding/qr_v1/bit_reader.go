@@ -31,6 +31,9 @@ func NewBitReader(matrix [][]bool, mask maskInterface) bitReader {
 }
 
 func (r *bitReader) ReadOne() (bool, int, int) {
+	if r.position >= len(readSequence) {
+		panic(fmt.Errorf("attempted to read bit at position %d, but only first %d bits are implemented", r.position, len(readSequence)))
+	}
 	x, y := readSequence[r.position][0], readSequence[r.position][1]
 	value := atMatrixXORMask(r.matrix, r.mask, x, y)
 	defer func(r *bitReader) { r.position++ }(r) // shift after returning
