@@ -2,30 +2,16 @@ package decoding
 
 import (
 	"fmt"
+
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
 
-type CodeInterface interface {
-	Detect([][]bool) bool
-	Decode([][]bool) (string, error)
+var KNOWN_CODES = []types.CodeInterface{
+	qr_v1.QRVer1{},
 }
 
-type QRVer1 struct{}
-
-var KNOWN_CODES = []CodeInterface{
-	QRVer1{},
-}
-
-var QRCorner = [][]bool{
-	{true, true, true, true, true, true, true},
-	{true, false, false, false, false, false, true},
-	{true, false, true, true, true, false, true},
-	{true, false, true, true, true, false, true},
-	{true, false, true, true, true, false, true},
-	{true, false, false, false, false, false, true},
-	{true, true, true, true, true, true, true},
-}
-
-func DetectCodeType(matrix [][]bool) (CodeInterface, error) {
+func DetectCodeType(matrix [][]bool) (types.CodeInterface, error) {
 
 	for _, code := range KNOWN_CODES {
 		ok := code.Detect(matrix)
