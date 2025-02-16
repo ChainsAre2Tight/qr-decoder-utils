@@ -14,11 +14,27 @@ type formatInterface interface {
 
 type integerFormat struct{}
 
-// type byteFormat struct{}
+type byteFormat struct{}
 
 var formats = map[string]formatInterface{
 	"0001": integerFormat{},
-	// "0100": byteFormat{},
+	"0100": byteFormat{},
+}
+
+func (byteFormat) ReadData(matrix [][]bool, mask maskInterface) (string, error) {
+	reader := NewBitReader(matrix, mask)
+	length := utils.BoolSliceToDecimal(reader.ReadMultiple(8))
+	log.Println("detected content length:", length)
+
+	raw := make([]byte, length)
+
+	for i := range length {
+		raw[i] = reader.ReadBytes()
+	}
+
+	data, err := utils.BytesToISO8859dash1(raw)
+
+	return data, err
 }
 
 func (integerFormat) ReadData(matrix [][]bool, mask maskInterface) (string, error) {

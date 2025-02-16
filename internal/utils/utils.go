@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
+	"golang.org/x/text/encoding/charmap"
 )
 
 func Concat(a, b string) string {
@@ -71,4 +72,13 @@ func BoolSliceToDecimal(slice []bool) int {
 		}
 	}
 	return result
+}
+
+func BytesToISO8859dash1(in []byte) (string, error) {
+	decoder := charmap.ISO8859_1.NewDecoder()
+	out, err := decoder.Bytes(in)
+	if err != nil {
+		panic(err)
+	}
+	return string(out), nil
 }
