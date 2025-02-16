@@ -7,7 +7,7 @@ $ git clone https://github.com/ChainsAre2Tight/qr-decoder-utils
 $ cd qr-decoder-utils
 для linux:
 $ make build
-lkz windows:
+для windows:
 > go build -o ./bin/qr_decoder.exe ./cmd/main.go 
 ```
 ## Использование
