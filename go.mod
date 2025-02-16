@@ -6,4 +6,4 @@ require golang.org/x/image v0.24.0
 
 require github.com/tealeg/xlsx v1.0.5
 
-require golang.org/x/text v0.22.0 // indirect
+require golang.org/x/text v0.22.0
