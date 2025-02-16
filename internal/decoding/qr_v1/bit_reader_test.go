@@ -19,7 +19,6 @@ func TestBitReaderSequence(t *testing.T) {
 		{20, 14}, {19, 14}, {20, 13}, {19, 13}, {20, 12}, {19, 12}, {20, 11}, {19, 11},
 		{20, 10}, {19, 10}, {20, 9}, {19, 9}, {18, 9}, {17, 9}, {18, 10}, {17, 10},
 	}
-	// log.Println(expectedSequence)
 
 	for position, pair := range expectedSequence {
 		_, x, y := reader.ReadOne()
