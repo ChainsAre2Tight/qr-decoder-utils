@@ -1,11 +1,14 @@
 # Утилита для декодирования QR кодов
 
 ## Установка
-**(необходим golang версии 1.23.2)**
+**(необходим golang версии > 1.22)**
 ```
 $ git clone https://github.com/ChainsAre2Tight/qr-decoder-utils
 $ cd qr-decoder-utils
+для linux:
 $ make build
+lkz windows:
+> go build -o ./bin/qr_decoder.exe ./cmd/main.go 
 ```
 ## Использование
 ### Запуск
