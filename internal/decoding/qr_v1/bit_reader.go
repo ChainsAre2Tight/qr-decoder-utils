@@ -2,6 +2,8 @@ package qr_v1
 
 import (
 	"fmt"
+
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 var readSequence = [][2]int{
@@ -42,4 +44,9 @@ func (r *bitReader) ReadMultiple(n int) []bool {
 	}
 	fmt.Println(result)
 	return result
+}
+
+func (r *bitReader) ReadBytes() byte {
+	raw := r.ReadMultiple(8)
+	return byte(utils.BoolSliceToDecimal(raw))
 }

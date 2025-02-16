@@ -4,7 +4,14 @@ import (
 	"testing"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
+
+type mockMask struct{}
+
+func (mockMask) At(_ types.Point) bool {
+	return false
+}
 
 func TestBitReaderSequence(t *testing.T) {
 	matrix := make([][]bool, 21)
@@ -12,7 +19,7 @@ func TestBitReaderSequence(t *testing.T) {
 		matrix[i] = make([]bool, 21)
 	}
 
-	reader := qr_v1.NewBitReader(matrix, qr_v1.Mask000{})
+	reader := qr_v1.NewBitReader(matrix, mockMask{})
 
 	var expectedSequence = [][2]int{
 		{20, 18}, {19, 18}, {20, 17}, {19, 17}, {20, 16}, {19, 16}, {20, 15}, {19, 15},
