@@ -2,6 +2,7 @@ package input
 
 import (
 	"image"
+	_ "image/gif"
 	_ "image/jpeg"
 	"log"
 	"os"

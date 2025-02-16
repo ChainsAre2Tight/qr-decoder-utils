@@ -1,6 +1,7 @@
 *.jpg
 *.png
 *.xlsx
+*.gif
 bin/*
 
 !.gitkeep
