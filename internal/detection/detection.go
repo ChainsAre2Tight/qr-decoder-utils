@@ -61,6 +61,7 @@ func detectBorders(img image.Image) (image.Rectangle, error) {
 
 	borders := calcBorder(ul, ur, ll, lr)
 	log.Println("caclulated borders:", borders)
+	// output.DebugImageOutput(img, []image.Point{ll, lr, ur, ul})
 	return borders, nil
 }
 
@@ -89,8 +90,9 @@ func detectPixelSize(img image.Image) (int, error) {
 			value += rgbaToValue(img.At(x, y+d+1))
 		}
 
-		if value > 500000 {
-			return d, nil
+		if value > 300000 {
+			// output.DebugImageOutput(img, []image.Point{image.Point{x, y}})
+			return d + 1, nil
 		}
 	}
 	return -1, fmt.Errorf("no pixel size detected")
