@@ -38,6 +38,29 @@ func MatrixToImage(matrix [][]bool, filepath string) {
 	png.Encode(file, img)
 }
 
+func DebugImageOutput(img image.Image, points []image.Point) {
+	result := image.NewRGBA(img.Bounds())
+	redColor := color.RGBA{255, 0, 0, 255}
+	b := result.Bounds()
+	for y := b.Min.Y; y < b.Max.Y; y++ {
+		for x := b.Min.X; x < b.Max.X; x++ {
+			result.Set(x, y, img.At(x, y))
+		}
+	}
+	for _, point := range points {
+		result.Set(point.X, point.Y, redColor)
+	}
+
+	file, err := os.Create("debug.png")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	log.Println("Writting debug result to debug.png")
+	png.Encode(file, result)
+}
+
 func MatrixToExcel(matrix [][]bool, filepath string) {
 	name := utils.Concat(filepath, ".xlsx")
 
