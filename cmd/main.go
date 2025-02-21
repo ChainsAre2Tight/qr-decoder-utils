@@ -63,12 +63,14 @@ func decode() {
 	// convert to matrix
 	matrix := conversion.ImageToMartix(qr)
 
-	// output to selected format
+	// detect code type
 	code, err := decoding.DetectCodeType(matrix)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Detected code type:", reflect.TypeOf(code).Name())
+
+	// attempt to decode
 	data, err := code.Decode(matrix)
 	if err != nil {
 		log.Fatal(err)
