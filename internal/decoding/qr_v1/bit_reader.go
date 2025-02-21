@@ -3,6 +3,7 @@ package qr_v1
 import (
 	"fmt"
 
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
@@ -18,11 +19,11 @@ var readSequence = [][2]int{
 
 type bitReader struct {
 	matrix   [][]bool
-	mask     MaskInterface
+	mask     masks.MaskInterface
 	position int
 }
 
-func NewBitReader(matrix [][]bool, mask MaskInterface) bitReader {
+func NewBitReader(matrix [][]bool, mask masks.MaskInterface) bitReader {
 	return bitReader{
 		matrix:   matrix,
 		mask:     mask,
@@ -35,7 +36,7 @@ func (r *bitReader) ReadOne() (bool, int, int) {
 		panic(fmt.Errorf("attempted to read bit at position %d, but only first %d bits are implemented", r.position, len(readSequence)))
 	}
 	x, y := readSequence[r.position][0], readSequence[r.position][1]
-	value := atMatrixXORMask(r.matrix, r.mask, x, y)
+	value := masks.AtMatrixXORMask(r.matrix, r.mask, x, y)
 	defer func(r *bitReader) { r.position++ }(r) // shift after returning
 	return value, x, y
 }

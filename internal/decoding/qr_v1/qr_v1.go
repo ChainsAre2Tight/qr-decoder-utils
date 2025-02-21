@@ -5,6 +5,7 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
@@ -47,7 +48,7 @@ func (QRVer1) Detect(matrix [][]bool) bool {
 
 type modeInterface interface{}
 
-func readModeAndMask(matrix [][]bool) (modeInterface, MaskInterface, error) {
+func readModeAndMask(matrix [][]bool) (modeInterface, masks.MaskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
 	if err != nil {
@@ -60,7 +61,7 @@ func readModeAndMask(matrix [][]bool) (modeInterface, MaskInterface, error) {
 	}
 
 	modeString := utils.BoolSliceToString(mode)
-	mask, ok := Masks[modeString]
+	mask, ok := masks.Masks[modeString]
 	if !ok {
 		return nil, nil, fmt.Errorf("no mask matches %s", modeString)
 	}
@@ -68,13 +69,13 @@ func readModeAndMask(matrix [][]bool) (modeInterface, MaskInterface, error) {
 	return nil, mask, nil
 }
 
-func readMetadata(matrix [][]bool, mask MaskInterface) (formatInterface, error) {
+func readMetadata(matrix [][]bool, mask masks.MaskInterface) (formatInterface, error) {
 	end := len(matrix) - 1
 	rawMetadata := []bool{
-		atMatrixXORMask(matrix, mask, end, end),
-		atMatrixXORMask(matrix, mask, end-1, end),
-		atMatrixXORMask(matrix, mask, end, end-1),
-		atMatrixXORMask(matrix, mask, end-1, end-1),
+		masks.AtMatrixXORMask(matrix, mask, end, end),
+		masks.AtMatrixXORMask(matrix, mask, end-1, end),
+		masks.AtMatrixXORMask(matrix, mask, end, end-1),
+		masks.AtMatrixXORMask(matrix, mask, end-1, end-1),
 	}
 
 	metadataString := utils.BoolSliceToString(rawMetadata)

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
@@ -16,7 +16,7 @@ func main() {
 
 	flag.Parse()
 	// log.Printf("Will output mask %d of size %f into %d", *outputMaskPtr, *outputSizePtr, *outputFilenamePtr)
-	mask, ok := qr_v1.Masks[*outputMaskPtr]
+	mask, ok := masks.Masks[*outputMaskPtr]
 	if !ok {
 		log.Fatal("Mask is unknown")
 	}
@@ -26,7 +26,7 @@ func main() {
 	output.MatrixToExcel(matrix, *outputFilenamePtr)
 }
 
-func generate_matrix(size int, mask qr_v1.MaskInterface) [][]bool {
+func generate_matrix(size int, mask masks.MaskInterface) [][]bool {
 	result := make([][]bool, size)
 	for i := range size {
 		result[i] = make([]bool, size)
