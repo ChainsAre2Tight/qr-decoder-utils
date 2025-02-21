@@ -9,7 +9,7 @@ import (
 )
 
 type formatInterface interface {
-	ReadData([][]bool, maskInterface) (string, error)
+	ReadData([][]bool, MaskInterface) (string, error)
 }
 
 type integerFormat struct{}
@@ -21,7 +21,7 @@ var formats = map[string]formatInterface{
 	"0100": byteFormat{},
 }
 
-func (byteFormat) ReadData(matrix [][]bool, mask maskInterface) (string, error) {
+func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface) (string, error) {
 	reader := NewBitReader(matrix, mask)
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(8))
 	log.Println("detected content length:", length)
@@ -37,7 +37,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask maskInterface) (string, error) 
 	return data, err
 }
 
-func (integerFormat) ReadData(matrix [][]bool, mask maskInterface) (string, error) {
+func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface) (string, error) {
 	reader := NewBitReader(matrix, mask)
 	// read length
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(10))

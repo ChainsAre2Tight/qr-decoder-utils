@@ -2,7 +2,7 @@ package qr_v1
 
 import "github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 
-type maskInterface interface {
+type MaskInterface interface {
 	At(types.Point) bool
 }
 
@@ -15,7 +15,7 @@ type mask101 struct{}
 type mask110 struct{}
 type mask111 struct{}
 
-var masks = map[string]maskInterface{
+var Masks = map[string]MaskInterface{
 	"000": mask000{},
 	"001": mask001{},
 	"010": mask010{},
@@ -26,7 +26,7 @@ var masks = map[string]maskInterface{
 	"111": mask111{},
 }
 
-func atMatrixXORMask(matrix [][]bool, mask maskInterface, x, y int) bool {
+func atMatrixXORMask(matrix [][]bool, mask MaskInterface, x, y int) bool {
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 

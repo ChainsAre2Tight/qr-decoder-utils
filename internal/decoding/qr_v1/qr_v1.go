@@ -47,7 +47,7 @@ func (QRVer1) Detect(matrix [][]bool) bool {
 
 type modeInterface interface{}
 
-func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
+func readModeAndMask(matrix [][]bool) (modeInterface, MaskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
 	if err != nil {
@@ -60,7 +60,7 @@ func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
 	}
 
 	modeString := utils.BoolSliceToString(mode)
-	mask, ok := masks[modeString]
+	mask, ok := Masks[modeString]
 	if !ok {
 		return nil, nil, fmt.Errorf("no mask matches %s", modeString)
 	}
@@ -68,7 +68,7 @@ func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
 	return nil, mask, nil
 }
 
-func readMetadata(matrix [][]bool, mask maskInterface) (formatInterface, error) {
+func readMetadata(matrix [][]bool, mask MaskInterface) (formatInterface, error) {
 	end := len(matrix) - 1
 	rawMetadata := []bool{
 		atMatrixXORMask(matrix, mask, end, end),

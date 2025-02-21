@@ -18,11 +18,11 @@ var readSequence = [][2]int{
 
 type bitReader struct {
 	matrix   [][]bool
-	mask     maskInterface
+	mask     MaskInterface
 	position int
 }
 
-func NewBitReader(matrix [][]bool, mask maskInterface) bitReader {
+func NewBitReader(matrix [][]bool, mask MaskInterface) bitReader {
 	return bitReader{
 		matrix:   matrix,
 		mask:     mask,
