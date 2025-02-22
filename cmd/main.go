@@ -11,7 +11,6 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/detection"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/input"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
 
 func main() {
@@ -73,14 +72,23 @@ func convert() {
 	modePtr := flag.String("format", "", "specifies conversion mode [excel | image]")
 	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
 	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
+	includeMasksPtr := flag.Bool("include-masks", false, "include all known masks as additional sheets")
 	flag.Parse()
 
 	var outputFunction func([][]bool, string)
 	switch *modePtr {
 	case "excel":
 		log.Print("output is set as to excel spreadsheet")
-		outputFunction = output.MatrixToExcel
+		if *includeMasksPtr {
+			outputFunction = output.MatrixToExcelWithMasks
+		} else {
+			outputFunction = output.MatrixToExcel
+		}
 	case "image":
+		if *includeMasksPtr {
+			log.Print("--include-masks module is supported only for excel conversion")
+			printUsage()
+		}
 		log.Print("output is set as to image")
 		outputFunction = output.MatrixToImage
 	default:
@@ -136,13 +144,7 @@ func mask() {
 		printUsage()
 	}
 
-	result := make([][]bool, *outputSizePtr)
-	for i := range *outputSizePtr {
-		result[i] = make([]bool, *outputSizePtr)
-		for j := range *outputSizePtr {
-			result[i][j] = mask.At(types.NewPoint(i, j))
-		}
-	}
+	result := masks.GenerateMaskedMatrix(*outputSizePtr, mask)
 
 	output.MatrixToExcel(result, *outputFilenamePtr)
 }

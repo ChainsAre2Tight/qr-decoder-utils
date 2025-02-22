@@ -32,6 +32,17 @@ func AtMatrixXORMask(matrix [][]bool, mask interfaces.MaskInterface, x, y int) b
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 
+func GenerateMaskedMatrix(n int, mask interfaces.MaskInterface) [][]bool {
+	result := make([][]bool, n)
+	for i := range n {
+		result[i] = make([]bool, n)
+		for j := range n {
+			result[i][j] = mask.At(types.NewPoint(i, j))
+		}
+	}
+	return result
+}
+
 func (Mask000) At(point types.Point) bool {
 	return (point.X+point.Y)%2 == 0
 }
@@ -57,7 +68,7 @@ func (Mask101) At(point types.Point) bool {
 }
 
 func (Mask110) At(point types.Point) bool {
-	return ((point.X*point.Y)%2 + (point.X*point.Y)%3) == 0
+	return ((point.X*point.Y)%2+(point.X*point.Y)%3)%2 == 0
 }
 
 func (Mask111) At(point types.Point) bool {
