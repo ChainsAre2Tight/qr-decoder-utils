@@ -3,6 +3,7 @@ package qr_v1
 import (
 	"fmt"
 
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/data_formats"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
@@ -54,7 +55,7 @@ func (QRVer1) ReadFormat(matrix [][]bool, mask interfaces.MaskInterface, reader 
 	rawMetadata := reader.ReadMultiple(4)
 
 	metadataString := utils.BoolSliceToString(rawMetadata)
-	format, ok := formats[metadataString]
+	format, ok := data_formats.SUPPORTED_FORMATS[metadataString]
 	if !ok {
 		return nil, fmt.Errorf("format %s is unknown or is not implemented", metadataString)
 	}

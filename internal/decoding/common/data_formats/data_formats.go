@@ -1,4 +1,4 @@
-package qr_v1
+package data_formats
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type integerFormat struct{}
 
 type byteFormat struct{}
 
-var formats = map[string]interfaces.FormatInterface{
+var SUPPORTED_FORMATS = map[string]interfaces.FormatInterface{
 	"0001": integerFormat{},
 	"0100": byteFormat{},
 }
