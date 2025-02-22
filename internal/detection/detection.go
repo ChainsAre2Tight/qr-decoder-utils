@@ -24,10 +24,10 @@ func DetectQR(img image.Image) (image.Image, error) {
 		return image.Black, err
 	}
 
-	log.Println("pixel size is ", pixelSize)
+	log.Println("Pixel size is ", pixelSize)
 
 	newDimensions := calculateNewDimensions(cropped, pixelSize)
-	log.Println("Converting to QR of size ", newDimensions)
+	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
 
 	resized := resize(cropped, newDimensions)
 	return resized, nil
@@ -39,28 +39,28 @@ func detectBorders(img image.Image) (image.Rectangle, error) {
 	if err != nil {
 		return image.Rectangle{}, err
 	}
-	log.Println("ul is at", ul.X, ul.Y)
+	// log.Println("ul is at", ul.X, ul.Y)
 
 	ll, err := detectLowerLeft(img, ul)
 	if err != nil {
 		return image.Rectangle{}, err
 	}
-	log.Println("bl is at", ll.X, ll.Y)
+	// log.Println("bl is at", ll.X, ll.Y)
 
 	ur, err := detectUpperRight(img, ul)
 	if err != nil {
 		return image.Rectangle{}, err
 	}
-	log.Println("ur is at", ur.X, ur.Y)
+	// log.Println("ur is at", ur.X, ur.Y)
 
 	lr, err := detectLowerRightFromLowerLeft(img, ll)
 	if err != nil {
 		return image.Rectangle{}, err
 	}
-	log.Println("lr is at", lr.X, lr.Y)
+	// log.Println("lr is at", lr.X, lr.Y)
 
 	borders := calcBorder(ul, ur, ll, lr)
-	log.Println("caclulated borders:", borders)
+	log.Println("Caclulated borders:", borders)
 	return borders, nil
 }
 

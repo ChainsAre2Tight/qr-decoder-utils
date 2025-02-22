@@ -67,7 +67,7 @@ func decode() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("the data is: ", data)
+	log.Println("Decoded contents:\n\n", data)
 }
 
 func convertImage() {

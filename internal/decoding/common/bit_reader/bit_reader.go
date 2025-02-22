@@ -1,8 +1,6 @@
 package bitreader
 
 import (
-	"fmt"
-
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
@@ -73,7 +71,7 @@ func (r *bitReader) ReadMultiple(n int) []bool {
 	for i := range result {
 		result[i] = r.readOne()
 	}
-	fmt.Println(result)
+	// fmt.Println(result)
 	return result
 }
 
