@@ -8,7 +8,7 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 	"github.com/tealeg/xlsx"
 )
@@ -42,11 +42,46 @@ func MatrixToExcel(matrix [][]bool, filepath string) {
 	name := utils.Concat(filepath, ".xlsx")
 
 	file := xlsx.NewFile()
-	sheet, err := file.AddSheet("QR 1")
-
+	mainSheet, err := file.AddSheet("QR 1")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	matrixToSheet(matrix, mainSheet)
+
+	log.Println("writting excel to", name)
+	err = file.Save(name)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func MatrixToExcelWithMasks(matrix [][]bool, filepath string) {
+	name := utils.Concat(filepath, ".xlsx")
+
+	file := xlsx.NewFile()
+	mainSheet, err := file.AddSheet("QR")
+	if err != nil {
+		log.Fatal(err)
+	}
+	matrixToSheet(matrix, mainSheet)
+
+	for _, mask := range masks.Masks {
+		maskSheet, err := file.AddSheet(reflect.TypeOf(mask).Name())
+		if err != nil {
+			log.Fatal(err)
+		}
+		matrixToSheet(masks.GenerateMaskedMatrix(len(matrix), mask), maskSheet)
+	}
+
+	log.Println("writting excel to", name)
+	err = file.Save(name)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func matrixToSheet(matrix [][]bool, sheet *xlsx.Sheet) {
 	sheet.SetColWidth(0, len(matrix)-1, 2)
 
 	BLACK := xlsx.NewStyle()
@@ -67,23 +102,4 @@ func MatrixToExcel(matrix [][]bool, filepath string) {
 			}
 		}
 	}
-
-	log.Println("writting excel to", name)
-	err = file.Save(name)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func MatrixToValue(matrix [][]bool, _ string) {
-	code, err := decoding.DetectCodeType(matrix)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Detected code type:", reflect.TypeOf(code).Name())
-	data, err := code.Decode(matrix)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("the data is: ", data)
 }

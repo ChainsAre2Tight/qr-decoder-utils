@@ -2,33 +2,18 @@ package qr_v1
 
 import (
 	"fmt"
-	"log"
-	"reflect"
 
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/data_formats"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 type QRVer1 struct{}
 
-func (QRVer1) Decode(matrix [][]bool) (string, error) {
-	_, mask, err := readModeAndMask(matrix)
-	if err != nil {
-		return "", err
-	}
-	log.Println("selected mask is", reflect.TypeOf(mask))
-
-	format, err := readMetadata(matrix, mask)
-	if err != nil {
-		return "", err
-	}
-	log.Println("selected format is", reflect.TypeOf(format))
-
-	data, err := format.ReadData(matrix, mask)
-	if err != nil {
-		return "", err
-	}
-	return data, nil
+func (QRVer1) OOB() interfaces.OutOfBoundsInterface {
+	return oob{}
 }
 
 func (QRVer1) Detect(matrix [][]bool) bool {
@@ -45,9 +30,7 @@ func (QRVer1) Detect(matrix [][]bool) bool {
 	return false
 }
 
-type modeInterface interface{}
-
-func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
+func (QRVer1) ReadMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
 	if err != nil {
@@ -60,7 +43,7 @@ func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
 	}
 
 	modeString := utils.BoolSliceToString(mode)
-	mask, ok := masks[modeString]
+	mask, ok := masks.Masks[modeString]
 	if !ok {
 		return nil, nil, fmt.Errorf("no mask matches %s", modeString)
 	}
@@ -68,17 +51,11 @@ func readModeAndMask(matrix [][]bool) (modeInterface, maskInterface, error) {
 	return nil, mask, nil
 }
 
-func readMetadata(matrix [][]bool, mask maskInterface) (formatInterface, error) {
-	end := len(matrix) - 1
-	rawMetadata := []bool{
-		atMatrixXORMask(matrix, mask, end, end),
-		atMatrixXORMask(matrix, mask, end-1, end),
-		atMatrixXORMask(matrix, mask, end, end-1),
-		atMatrixXORMask(matrix, mask, end-1, end-1),
-	}
+func (QRVer1) ReadFormat(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (interfaces.FormatInterface, error) {
+	rawMetadata := reader.ReadMultiple(4)
 
 	metadataString := utils.BoolSliceToString(rawMetadata)
-	format, ok := formats[metadataString]
+	format, ok := data_formats.SUPPORTED_FORMATS[metadataString]
 	if !ok {
 		return nil, fmt.Errorf("format %s is unknown or is not implemented", metadataString)
 	}

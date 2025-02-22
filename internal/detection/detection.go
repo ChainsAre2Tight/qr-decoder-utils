@@ -24,7 +24,7 @@ func DetectQR(img image.Image) (image.Image, error) {
 		return image.Black, err
 	}
 
-	log.Println("pizel size is ", pixelSize)
+	log.Println("pixel size is ", pixelSize)
 
 	newDimensions := calculateNewDimensions(cropped, pixelSize)
 	log.Println("Converting to QR of size ", newDimensions)
@@ -40,6 +40,7 @@ func detectBorders(img image.Image) (image.Rectangle, error) {
 		return image.Rectangle{}, err
 	}
 	log.Println("ul is at", ul.X, ul.Y)
+
 	ll, err := detectLowerLeft(img, ul)
 	if err != nil {
 		return image.Rectangle{}, err
@@ -52,7 +53,15 @@ func detectBorders(img image.Image) (image.Rectangle, error) {
 	}
 	log.Println("ur is at", ur.X, ur.Y)
 
-	return image.Rectangle{Min: ul, Max: image.Point{X: ur.X, Y: ll.Y}}, nil
+	lr, err := detectLowerRightFromLowerLeft(img, ll)
+	if err != nil {
+		return image.Rectangle{}, err
+	}
+	log.Println("lr is at", lr.X, lr.Y)
+
+	borders := calcBorder(ul, ur, ll, lr)
+	log.Println("caclulated borders:", borders)
+	return borders, nil
 }
 
 func cropFields(img image.Image, border image.Rectangle) (image.Image, error) {
@@ -121,6 +130,32 @@ func detectUpperLeft(img image.Image) (image.Point, error) {
 		}
 	}
 	return image.Point{0, 0}, fmt.Errorf("no corner detected")
+}
+
+func detectLowerRightFromLowerLeft(img image.Image, lowerLeft image.Point) (image.Point, error) {
+	bounds := img.Bounds()
+
+	for x := bounds.Max.X; x > lowerLeft.X+5; x-- {
+		value := rgbaToValue(img.At(x, lowerLeft.Y))
+		for d := range 5 {
+			value += rgbaToValue(img.At(x, lowerLeft.Y-d-1))
+			value += rgbaToValue(img.At(x-d-1, lowerLeft.Y))
+		}
+		if isCorner(value) {
+			return image.Point{x, lowerLeft.Y}, nil
+		}
+	}
+	return image.Point{0, 0}, fmt.Errorf("no corner detected")
+}
+
+func calcBorder(ul, ur, ll, lr image.Point) image.Rectangle {
+	return image.Rectangle{
+		Min: ul,
+		Max: image.Point{
+			X: max(ur.X, lr.X),
+			Y: ll.Y,
+		},
+	}
 }
 
 func detectLowerLeft(img image.Image, upperLeft image.Point) (image.Point, error) {
