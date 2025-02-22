@@ -4,14 +4,14 @@ import (
 	"fmt"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 )
 
-var KNOWN_CODES = []types.CodeInterface{
+var KNOWN_CODES = []interfaces.CodeInterface{
 	qr_v1.QRVer1{},
 }
 
-func DetectCodeType(matrix [][]bool) (types.CodeInterface, error) {
+func detectCodeType(matrix [][]bool) (interfaces.CodeInterface, error) {
 
 	for _, code := range KNOWN_CODES {
 		ok := code.Detect(matrix)

@@ -1,10 +1,11 @@
 package masks
 
-import "github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
+import (
+	"fmt"
 
-type MaskInterface interface {
-	At(types.Point) bool
-}
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
+)
 
 type Mask000 struct{}
 type Mask001 struct{}
@@ -15,7 +16,7 @@ type Mask101 struct{}
 type Mask110 struct{}
 type Mask111 struct{}
 
-var Masks = map[string]MaskInterface{
+var Masks = map[string]interfaces.MaskInterface{
 	"000": Mask000{},
 	"001": Mask001{},
 	"010": Mask010{},
@@ -26,7 +27,8 @@ var Masks = map[string]MaskInterface{
 	"111": Mask111{},
 }
 
-func AtMatrixXORMask(matrix [][]bool, mask MaskInterface, x, y int) bool {
+func AtMatrixXORMask(matrix [][]bool, mask interfaces.MaskInterface, x, y int) bool {
+	fmt.Println(x, y, matrix[x][y], mask.At(types.NewPoint(x, y)))
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 

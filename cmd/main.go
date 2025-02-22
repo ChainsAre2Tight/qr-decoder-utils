@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"os"
-	"reflect"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/conversion"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding"
@@ -63,15 +62,7 @@ func decode() {
 	// convert to matrix
 	matrix := conversion.ImageToMartix(qr)
 
-	// detect code type
-	code, err := decoding.DetectCodeType(matrix)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Detected code type:", reflect.TypeOf(code).Name())
-
-	// attempt to decode
-	data, err := code.Decode(matrix)
+	data, err := decoding.Decode(matrix)
 	if err != nil {
 		log.Fatal(err)
 	}
