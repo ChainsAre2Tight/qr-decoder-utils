@@ -17,7 +17,7 @@ func main() {
 
 	// parse master mode argument
 	if len(os.Args) < 2 {
-		log.Fatal("Master mode not selected \n--mode [convert | mask | decode]")
+		log.Fatal("Master mode not selected \n--mode [excel | image | mask | decode]")
 	}
 	masterModePtr := os.Args[1]
 
@@ -25,8 +25,10 @@ func main() {
 	os.Args = os.Args[1:]
 
 	switch masterModePtr {
-	case "convert":
-		convert()
+	case "excel":
+		convertExcel()
+	case "image":
+		convertImage()
 	case "mask":
 		mask()
 	case "decode":
@@ -68,34 +70,17 @@ func decode() {
 	log.Println("the data is: ", data)
 }
 
-func convert() {
-	modePtr := flag.String("format", "", "specifies conversion mode [excel | image]")
+func convertImage() {
 	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
 	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
-	includeMasksPtr := flag.Bool("include-masks", false, "include all known masks as additional sheets")
 	flag.Parse()
 
-	var outputFunction func([][]bool, string)
-	switch *modePtr {
-	case "excel":
-		log.Print("output is set as to excel spreadsheet")
-		if *includeMasksPtr {
-			outputFunction = output.MatrixToExcelWithMasks
-		} else {
-			outputFunction = output.MatrixToExcel
-		}
-	case "image":
-		if *includeMasksPtr {
-			log.Print("--include-masks module is supported only for excel conversion")
-			printUsage()
-		}
-		log.Print("output is set as to image")
-		outputFunction = output.MatrixToImage
-	default:
-		log.Printf("unknown format: \"%s\"", *modePtr)
-		printUsage()
-	}
+	log.Print("output is set as to image")
+	matrix := loadAndConvert(inputFilenamePtr, outputFilenamePtr)
+	output.MatrixToImage(matrix, *outputFilenamePtr)
+}
 
+func loadAndConvert(inputFilenamePtr, outputFilenamePtr *string) [][]bool {
 	if *inputFilenamePtr == "" {
 		log.Print("Input filename not specified")
 		printUsage()
@@ -117,6 +102,24 @@ func convert() {
 
 	// convert to matrix
 	matrix := conversion.ImageToMartix(qr)
+	return matrix
+}
+
+func convertExcel() {
+	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
+	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
+	includeMasksPtr := flag.Bool("include-masks", false, "include all known masks as additional sheets")
+	flag.Parse()
+
+	log.Print("output is set as to excel spreadsheet")
+	var outputFunction func([][]bool, string)
+	if *includeMasksPtr {
+		outputFunction = output.MatrixToExcelWithMasks
+	} else {
+		outputFunction = output.MatrixToExcel
+	}
+
+	matrix := loadAndConvert(inputFilenamePtr, outputFilenamePtr)
 
 	// output to selected format
 	outputFunction(matrix, *outputFilenamePtr)
