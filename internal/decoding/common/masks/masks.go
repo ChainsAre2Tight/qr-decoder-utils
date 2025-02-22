@@ -1,8 +1,6 @@
 package masks
 
 import (
-	"fmt"
-
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
@@ -28,7 +26,7 @@ var Masks = map[string]interfaces.MaskInterface{
 }
 
 func AtMatrixXORMask(matrix [][]bool, mask interfaces.MaskInterface, x, y int) bool {
-	fmt.Println(x, y, matrix[x][y], mask.At(types.NewPoint(x, y)))
+	// fmt.Println(x, y, matrix[x][y], mask.At(types.NewPoint(x, y)))
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 

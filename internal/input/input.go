@@ -20,8 +20,6 @@ func ReadImage(filepath string) image.Image {
 	if err != nil {
 		log.Fatal(err)
 	}
-	bounds := m.Bounds()
-	log.Println(bounds.Min.X, bounds.Min.Y, bounds.Max.X, bounds.Max.Y)
 
 	return m
 }

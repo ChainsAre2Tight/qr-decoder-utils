@@ -26,7 +26,7 @@ func (d *decoder) decode() (string, error) {
 		return "", err
 	}
 
-	log.Println("detected mask:", reflect.TypeOf(mask))
+	log.Println("Detected mask:", reflect.TypeOf(mask).Name())
 	reader := bitreader.NewBitReader(d.matrix, mask, d.code.OOB())
 
 	format, err := d.code.ReadFormat(d.matrix, mask, reader)
