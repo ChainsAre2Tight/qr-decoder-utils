@@ -24,7 +24,7 @@ func (QRVer2) Detect(matrix [][]bool) bool {
 }
 
 func (QRVer2) OOB() interfaces.OutOfBoundsInterface {
-	panic("not implemented")
+	return oob{}
 }
 
 func (QRVer2) ReadMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInterface, error) {
@@ -33,4 +33,18 @@ func (QRVer2) ReadMetadata(matrix [][]bool) (interfaces.ModeInterface, interface
 
 func (QRVer2) ReadFormat(matrix [][]bool, _ interfaces.MaskInterface, _ interfaces.BitReaderInterface) (interfaces.FormatInterface, error) {
 	panic("not implemented")
+}
+
+type oob struct{}
+
+func (oob) SkipCell(x, y int) bool {
+	return y == 6 ||
+		x <= 8 && y <= 8 ||
+		x <= 8 && y >= 17 ||
+		x >= 17 && y <= 8 ||
+		x >= 16 && x <= 20 && y >= 16 && y <= 20
+}
+
+func (oob) SkipColumn(x int) bool {
+	return x == 6
 }
