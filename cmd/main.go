@@ -13,6 +13,22 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
 )
 
+var (
+	inputFilenamePtr  *string
+	outputFilenamePtr *string
+	includeMasksPtr   *bool
+	outputSizePtr     *int
+	maskPtr           *string
+)
+
+func init() {
+	inputFilenamePtr = flag.String("input", "", "specifies an image file to parse")
+	outputFilenamePtr = flag.String("output", "", "specifies an output file name")
+	includeMasksPtr = flag.Bool("include-masks", false, "include all known masks as additional sheets")
+	maskPtr = flag.String("mask", "None", "specifies mask. [000-111]")
+	outputSizePtr = flag.Int("size", 21, "specifies output matrix size [1-100]")
+}
+
 func main() {
 
 	// parse master mode argument
@@ -23,6 +39,7 @@ func main() {
 
 	// removes first argument so that flag.Parse doesn't get stuck at first positional arg
 	os.Args = os.Args[1:]
+	flag.Parse()
 
 	switch masterModePtr {
 	case "excel":
@@ -41,8 +58,6 @@ func main() {
 }
 
 func decode() {
-	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
-	flag.Parse()
 
 	if *inputFilenamePtr == "" {
 		log.Print("Input filename not specified")
@@ -71,10 +86,6 @@ func decode() {
 }
 
 func convertImage() {
-	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
-	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
-	flag.Parse()
-
 	log.Print("output is set as to image")
 	matrix := loadAndConvert(inputFilenamePtr, outputFilenamePtr)
 	output.MatrixToImage(matrix, *outputFilenamePtr)
@@ -106,9 +117,6 @@ func loadAndConvert(inputFilenamePtr, outputFilenamePtr *string) [][]bool {
 }
 
 func convertExcel() {
-	inputFilenamePtr := flag.String("input", "", "specifies an image file to parse")
-	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
-	includeMasksPtr := flag.Bool("include-masks", false, "include all known masks as additional sheets")
 	flag.Parse()
 
 	log.Print("output is set as to excel spreadsheet")
@@ -126,11 +134,6 @@ func convertExcel() {
 }
 
 func mask() {
-	maskPtr := flag.String("mask", "None", "specifies mask. [000-111]")
-	outputFilenamePtr := flag.String("output", "", "specifies an output file name")
-	outputSizePtr := flag.Int("size", 21, "specifies output matrix size [1-100]")
-	flag.Parse()
-
 	if *outputSizePtr < 1 || *outputSizePtr > 100 {
 		log.Print("Output size out of range.")
 		printUsage()
