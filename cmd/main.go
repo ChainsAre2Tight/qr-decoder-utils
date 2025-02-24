@@ -26,7 +26,7 @@ func init() {
 	outputFilenamePtr = flag.String("output", "", "specifies an output file name")
 	includeMasksPtr = flag.Bool("include-masks", false, "include all known masks as additional sheets")
 	maskPtr = flag.String("mask", "None", "specifies mask. [000-111]")
-	outputSizePtr = flag.Int("size", 21, "specifies output matrix size [1-100]")
+	outputSizePtr = flag.Int("size", 0, "specifies output matrix size [1-100]")
 }
 
 func main() {
@@ -70,7 +70,7 @@ func requireOutputName() {
 	}
 }
 func validateOutputSize() {
-	if *outputSizePtr < 1 || *outputSizePtr > 100 {
+	if *outputSizePtr < 0 || *outputSizePtr > 100 {
 		log.Print("Output size out of range.")
 		printUsage()
 	}
@@ -101,7 +101,8 @@ func loadAndConvert(inputFilenamePtr *string) [][]bool {
 	img := input.ReadImage(*inputFilenamePtr)
 
 	// detect borders and resize
-	qr, err := detection.DetectQR(img)
+	validateOutputSize()
+	qr, err := detection.DetectQR(img, *outputSizePtr)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,6 +140,9 @@ func mask() {
 		printUsage()
 	}
 
+	if *outputSizePtr == 0 {
+		*outputSizePtr = 21
+	}
 	result := masks.GenerateMaskedMatrix(*outputSizePtr, mask)
 
 	output.MatrixToExcel(result, *outputFilenamePtr)

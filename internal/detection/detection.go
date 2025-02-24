@@ -10,7 +10,7 @@ import (
 	"golang.org/x/image/draw"
 )
 
-func DetectQR(img image.Image) (image.Image, error) {
+func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
 	border, err := detectBorders(img)
 	if err != nil {
 		return image.Black, err
@@ -19,14 +19,23 @@ func DetectQR(img image.Image) (image.Image, error) {
 	if err != nil {
 		return image.Black, err
 	}
-	pixelSize, err := detectPixelSize(cropped)
-	if err != nil {
-		return image.Black, err
+	var newDimensions int
+	if sizeOverride == 0 {
+		log.Println("Size not specified, attempting to detect...")
+
+		pixelSize, err := detectPixelSize(cropped)
+		if err != nil {
+			return image.Black, err
+		}
+
+		log.Println("Pixel size is ", pixelSize)
+
+		newDimensions = calculateNewDimensions(cropped, pixelSize)
+	} else {
+		log.Println("Provided size override")
+		newDimensions = sizeOverride
 	}
 
-	log.Println("Pixel size is ", pixelSize)
-
-	newDimensions := calculateNewDimensions(cropped, pixelSize)
 	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
 
 	resized := resize(cropped, newDimensions)
