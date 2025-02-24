@@ -49,7 +49,7 @@ func MatrixToExcel(matrix [][]bool, filepath string) {
 
 	matrixToSheet(matrix, mainSheet)
 
-	log.Println("writting excel to", name)
+	log.Println("Writing code to", name)
 	err = file.Save(name)
 	if err != nil {
 		log.Fatal(err)
@@ -74,7 +74,7 @@ func MatrixToExcelWithMasks(matrix [][]bool, filepath string) {
 		matrixToSheet(masks.GenerateMaskedMatrix(len(matrix), mask), maskSheet)
 	}
 
-	log.Println("writting excel to", name)
+	log.Println("Writing code and masks to", name)
 	err = file.Save(name)
 	if err != nil {
 		log.Fatal(err)
