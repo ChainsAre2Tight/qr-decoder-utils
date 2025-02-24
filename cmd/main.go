@@ -77,7 +77,6 @@ func validateOutputSize() {
 }
 
 func decode() {
-
 	requireInputName()
 	log.Println("Reading from", *inputFilenamePtr, "and attempting to decode")
 
@@ -102,15 +101,13 @@ func decode() {
 
 func convertImage() {
 	log.Print("output is set as to image")
-	matrix := loadAndConvert(inputFilenamePtr, outputFilenamePtr)
+	requireOutputName()
+	matrix := loadAndConvert(inputFilenamePtr)
 	output.MatrixToImage(matrix, *outputFilenamePtr)
 }
 
-func loadAndConvert(inputFilenamePtr, outputFilenamePtr *string) [][]bool {
+func loadAndConvert(inputFilenamePtr *string) [][]bool {
 	requireOutputName()
-	requireOutputName()
-
-	log.Println("Reading from", *inputFilenamePtr, "and writting to", *outputFilenamePtr)
 
 	// load image
 	img := input.ReadImage(*inputFilenamePtr)
@@ -128,6 +125,7 @@ func loadAndConvert(inputFilenamePtr, outputFilenamePtr *string) [][]bool {
 
 func convertExcel() {
 	flag.Parse()
+	requireOutputName()
 
 	log.Print("output is set as to excel spreadsheet")
 	var outputFunction func([][]bool, string)
@@ -137,7 +135,7 @@ func convertExcel() {
 		outputFunction = output.MatrixToExcel
 	}
 
-	matrix := loadAndConvert(inputFilenamePtr, outputFilenamePtr)
+	matrix := loadAndConvert(inputFilenamePtr)
 
 	// output to selected format
 	outputFunction(matrix, *outputFilenamePtr)
