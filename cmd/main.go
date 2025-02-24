@@ -78,19 +78,7 @@ func validateOutputSize() {
 
 func decode() {
 	requireInputName()
-	log.Println("Reading from", *inputFilenamePtr, "and attempting to decode")
-
-	// load image
-	img := input.ReadImage(*inputFilenamePtr)
-
-	// detect borders and resize
-	qr, err := detection.DetectQR(img)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// convert to matrix
-	matrix := conversion.ImageToMartix(qr)
+	matrix := loadAndConvert(inputFilenamePtr)
 
 	data, err := decoding.Decode(matrix)
 	if err != nil {
@@ -101,13 +89,13 @@ func decode() {
 
 func convertImage() {
 	log.Print("output is set as to image")
+	requireInputName()
 	requireOutputName()
 	matrix := loadAndConvert(inputFilenamePtr)
 	output.MatrixToImage(matrix, *outputFilenamePtr)
 }
 
 func loadAndConvert(inputFilenamePtr *string) [][]bool {
-	requireOutputName()
 
 	// load image
 	img := input.ReadImage(*inputFilenamePtr)
@@ -124,7 +112,7 @@ func loadAndConvert(inputFilenamePtr *string) [][]bool {
 }
 
 func convertExcel() {
-	flag.Parse()
+	requireInputName()
 	requireOutputName()
 
 	log.Print("output is set as to excel spreadsheet")
