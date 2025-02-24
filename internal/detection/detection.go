@@ -106,6 +106,20 @@ func detectPixelSize(img image.Image) (int, error) {
 		if value > 500000 {
 			return d, nil
 		}
+
+		// stub for datamatrix pixel detection
+		// TODO: come up with a better algorithm
+		y = bounds.Min.Y
+
+		value = rgbaToValue(img.At(x, y))
+		for d := range 5 {
+			value += rgbaToValue(img.At(x+d+1, y))
+			value += rgbaToValue(img.At(x, y+d+1))
+		}
+
+		if value > 500000 {
+			return d - 1, nil
+		}
 	}
 	return -1, fmt.Errorf("no pixel size detected")
 }
