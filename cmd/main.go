@@ -57,13 +57,28 @@ func main() {
 
 }
 
-func decode() {
-
+func requireInputName() {
 	if *inputFilenamePtr == "" {
 		log.Print("Input filename not specified")
 		printUsage()
 	}
+}
+func requireOutputName() {
+	if *outputFilenamePtr == "" {
+		log.Print("Output filename not specified")
+		printUsage()
+	}
+}
+func validateOutputSize() {
+	if *outputSizePtr < 1 || *outputSizePtr > 100 {
+		log.Print("Output size out of range.")
+		printUsage()
+	}
+}
 
+func decode() {
+
+	requireInputName()
 	log.Println("Reading from", *inputFilenamePtr, "and attempting to decode")
 
 	// load image
@@ -92,14 +107,9 @@ func convertImage() {
 }
 
 func loadAndConvert(inputFilenamePtr, outputFilenamePtr *string) [][]bool {
-	if *inputFilenamePtr == "" {
-		log.Print("Input filename not specified")
-		printUsage()
-	}
-	if *outputFilenamePtr == "" {
-		log.Print("Output filename not specified")
-		printUsage()
-	}
+	requireOutputName()
+	requireOutputName()
+
 	log.Println("Reading from", *inputFilenamePtr, "and writting to", *outputFilenamePtr)
 
 	// load image
@@ -134,15 +144,8 @@ func convertExcel() {
 }
 
 func mask() {
-	if *outputSizePtr < 1 || *outputSizePtr > 100 {
-		log.Print("Output size out of range.")
-		printUsage()
-	}
-
-	if *outputFilenamePtr == "" {
-		log.Print("Output filename not specified")
-		printUsage()
-	}
+	requireOutputName()
+	validateOutputSize()
 
 	mask, ok := masks.Masks[*maskPtr]
 	if !ok {
