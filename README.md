@@ -36,19 +36,25 @@ $ ./qr_decoder
     - Поддерживаемые форматы: **png** | **jpg** | **gif** (1 кадр)
 * **--output** string - путь, куда записать результат (для режимов image, excel и mask)
 * **--mask** string - тип маски **[000-111]**
-* **--size** int- размер матрицы с маской (по умолчанию 21x21)
+* **--size** int
+  * в режиме **mask** -  размер матрицы с маской (по умолчанию 21x21)
+  * в других режимах - пеопределяет размер кода на изображении (дебаг)
 * **--include-masks** bool - дописывает листы с масками при конвертации в .xlsx файлы
 
 ## Примеры использования
 * #### Конвертация .gif изображения в .xlsx с масками
 ```
-  > qr_decoder.exe excel --input ./image.gif --output ./result --include-masks
+qr_decoder.exe excel --input ./image.gif --output ./result --include-masks
+```
+* #### Конвертация .jpg изображения в .xlsx с переопределением размера кода
+```
+qr_decoder.exe excel --input ./image.jpg --output ./result --size 25
 ```
 * #### Декодирование содержимого изображения
 ```
-  > qr_decoder.exe decode --input ./image.jpg
+qr_decoder.exe decode --input ./image.jpg
 ```
 * #### Создание маски 010
 ```
-  > qr_decoder.exe mask --mask 010 --output ./mask010.xlsx
+qr_decoder.exe mask --mask 010 --output ./mask010.xlsx --size 25
 ```
