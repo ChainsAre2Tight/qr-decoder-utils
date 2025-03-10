@@ -6,3 +6,4 @@
 bin/*
 
 !.gitkeep
+!data/tests/**/*
