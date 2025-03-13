@@ -1,4 +1,4 @@
-![kurkod](https://github.com/ChainsAre2Tight/qr-decoder-utils/blob/main/.github/memes/kurkod.jpeg)
+![kurkod](https://github.com/ChainsAre2Tight/qr-decoder-utils/blob/master/.github/memes/kurkod.jpeg)
 # Утилита для декодирования QR кодов
 
 ## Установка
