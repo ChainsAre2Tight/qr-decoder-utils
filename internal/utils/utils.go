@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils/rand"
 	"golang.org/x/text/encoding/charmap"
 )
 
@@ -88,4 +89,8 @@ func ForceFileExtension(filepath, extension string) string {
 	dir, file := path.Split(filepath)
 	result := path.Join(dir, strings.Split(file, ".")[0]+extension)
 	return result
+}
+
+func GenerateRandomFilename() string {
+	return rand.String(8)
 }
