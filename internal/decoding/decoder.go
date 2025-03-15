@@ -33,6 +33,8 @@ func (d *decoder) decode() (string, error) {
 	if err != nil {
 		return "", err
 	}
+	log.Println("Detected format:", reflect.TypeOf(format).Name())
+
 	data, err := format.ReadData(d.matrix, mask, reader)
 	if err != nil {
 		return "", err

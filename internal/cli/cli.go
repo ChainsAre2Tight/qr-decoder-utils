@@ -11,6 +11,7 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/detection"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/input"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 var (
@@ -33,7 +34,7 @@ func CLI() {
 
 	// parse master mode argument
 	if len(os.Args) < 2 {
-		log.Fatal("Master mode not selected \n--mode [excel | image | mask | decode]")
+		log.Fatal("Master mode not selected [excel | image | mask | decode]")
 	}
 	masterModePtr := os.Args[1]
 
@@ -63,10 +64,12 @@ func requireInputName() {
 		printUsage()
 	}
 }
+
+// will generate random filename if flag wasn't provided
 func requireOutputName() {
 	if *outputFilenamePtr == "" {
-		log.Print("Output filename not specified")
-		printUsage()
+		*outputFilenamePtr = utils.GenerateRandomFilename()
+		log.Printf("WARNING: No --output filename specified, writting to %s", *outputFilenamePtr)
 	}
 }
 func validateOutputSize() {
@@ -88,7 +91,6 @@ func decode() {
 }
 
 func convertImage() {
-	log.Print("output is set as to image")
 	requireInputName()
 	requireOutputName()
 	matrix := LoadAndConvert(inputFilenamePtr)
@@ -116,7 +118,6 @@ func convertExcel() {
 	requireInputName()
 	requireOutputName()
 
-	log.Print("output is set as to excel spreadsheet")
 	var outputFunction func([][]bool, string)
 	if *includeMasksPtr {
 		outputFunction = output.MatrixToExcelWithMasks

@@ -27,19 +27,19 @@ func MatrixToImage(matrix [][]bool, filepath string) {
 		}
 	}
 
-	name := utils.Concat(filepath, ".png")
+	name := utils.ForceFileExtension(filepath, ".png")
 	file, err := os.Create(name)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	log.Println("Writting result to", filepath)
+	log.Println("Writting result to", name)
 	png.Encode(file, img)
 }
 
 func MatrixToExcel(matrix [][]bool, filepath string) {
-	name := utils.Concat(filepath, ".xlsx")
+	name := utils.ForceFileExtension(filepath, ".xlsx")
 
 	file := xlsx.NewFile()
 	mainSheet, err := file.AddSheet("QR 1")

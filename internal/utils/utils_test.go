@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -58,4 +59,38 @@ func TestReadMatrixRow(t *testing.T) {
 		t.Fatal("want: equal, row: 0, start: 1, end: 3 ", res, err, matrixA, row1half)
 	}
 
+}
+
+func TestForceExtension(t *testing.T) {
+	var tests = []struct {
+		in        string
+		extension string
+		out       string
+	}{
+		{"result.xlsx", ".xlsx", "result.xlsx"},
+		{"test.123.321", ".xlsx", "test.xlsx"},
+		{"image.png.xlsx.png", ".xlsx", "image.xlsx"},
+		{"image.png", ".png", "image.png"},
+		{"png.xlsx", ".png", "png.png"},
+		{"skibidi.png.xlsx", ".png", "skibidi.png"},
+		{"./somefolder/file.png", ".png", "somefolder/file.png"},
+		{"/folder1/folder.user/otherfolder/file.png", ".png", "/folder1/folder.user/otherfolder/file.png"},
+		{"/folder1/folder.user/otherfolder/file.png", ".user", "/folder1/folder.user/otherfolder/file.user"},
+		{"\\windows\\path\\file", ".test", "\\windows\\path\\file.test"},
+		{"/folder1/folder.user/./otherfolder/file.png", ".user", "/folder1/folder.user/otherfolder/file.user"},
+		{"/folder1/folder.user/../otherfolder/file.png", ".user", "/folder1/otherfolder/file.user"},
+		{"../folder/file.test", ".test", "../folder/file.test"},
+		// {".\\local\\windows\\file", ".asd", ".\\local\\windows\\file.asd"}, // path is broken on windwos, apparently this is a file with empty dir
+	}
+	for _, tt := range tests {
+		t.Run(
+			fmt.Sprintf("%s -> %s = %s", tt.in, tt.extension, tt.out),
+			func(t *testing.T) {
+				result := ForceFileExtension(tt.in, tt.extension)
+				if result != tt.out {
+					t.Errorf("\ngot\t%s\nwant\t%s", result, tt.out)
+				}
+			},
+		)
+	}
 }

@@ -20,7 +20,7 @@ var SUPPORTED_FORMATS = map[string]interfaces.FormatInterface{
 
 func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(8))
-	log.Println("detected content length:", length)
+	log.Println("Detected content length:", length)
 
 	raw := make([]byte, length)
 
@@ -36,7 +36,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reade
 func (integerFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
 	// read length
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(10))
-	log.Println("detected content length:", length)
+	log.Println("Detected content length:", length)
 
 	var resultBuilder strings.Builder
 
