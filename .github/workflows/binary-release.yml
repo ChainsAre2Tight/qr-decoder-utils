@@ -10,12 +10,11 @@ jobs:
     - uses: actions/checkout@master
     - name: compile and release
       uses: ngs/go-release.action@v1.0.1
-      with:
-        goversion: 1.23.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GO111MODULE: on
         GOARCH: amd64
+        GOVERSION: 1.23.2
         GOOS: linux
         EXTRA_FILES: "README.md"
   # release-linux-arm:
