@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"math"
+	"path"
 	"strings"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
@@ -81,4 +82,10 @@ func BytesToISO8859dash1(in []byte) (string, error) {
 		panic(err)
 	}
 	return string(out), nil
+}
+
+func ForceFileExtension(filepath, extension string) string {
+	dir, file := path.Split(filepath)
+	result := path.Join(dir, strings.Split(file, ".")[0]+extension)
+	return result
 }
