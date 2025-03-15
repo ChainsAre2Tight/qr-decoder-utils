@@ -31,7 +31,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        goversion: "1.23.2"
+        goversion: "https://go.dev/dl/go1.23.2.src.tar.gz"
         project_path: "./cmd/test-binary"
-        binary_name: "test-binary"
+        binary_name: "qr_decoder"
         extra_files: README.md
