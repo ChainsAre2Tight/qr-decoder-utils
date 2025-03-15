@@ -16,11 +16,6 @@ $ chmod +x qr_decoder.exe
 > go build -o qr_decoder.exe ./cmd/main.go
 ```
 ## Использование
-### Запуск
-```
-$ ./qr_decoder
-> qr_decoder.exe
-```
 ### Параметры
 
 * **mode** string - основной режим работы **[image | excel | decode | mask]**
@@ -42,7 +37,7 @@ $ ./qr_decoder
   * в других режимах - пеопределяет размер кода на изображении (дебаг)
 * **--include-masks** bool - дописывает листы с масками при конвертации в .xlsx файлы
 
-## Примеры использования
+### Примеры использования
 * #### Конвертация .gif изображения в .xlsx с масками
 ```
 qr_decoder.exe excel --input ./image.gif --output ./result --include-masks
