@@ -112,7 +112,7 @@ func detectPixelSize(img image.Image) (int, error) {
 
 func calculateNewDimensions(img image.Image, pixelSize int) int {
 	bounds := img.Bounds()
-	result := int(math.Ceil(float64(bounds.Dx()) / float64(pixelSize)))
+	result := calcOneDimension(bounds.Dx(), pixelSize)
 	return result
 }
 
