@@ -41,7 +41,7 @@ func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
 
 	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
 
-	resized := resize(cropped, newDimensions)
+	resized := resize(cropped, newDimensions, newDimensions)
 	return resized, nil
 }
 
@@ -116,8 +116,8 @@ func calculateNewDimensions(img image.Image, pixelSize int) int {
 	return result
 }
 
-func resize(img image.Image, newDimensions int) image.Image {
-	result := image.NewRGBA(image.Rect(0, 0, newDimensions, newDimensions))
+func resize(img image.Image, newX, newY int) image.Image {
+	result := image.NewRGBA(image.Rect(0, 0, newX, newY))
 	draw.NearestNeighbor.Scale(result, result.Rect, img, img.Bounds(), draw.Over, nil)
 	return result
 }
