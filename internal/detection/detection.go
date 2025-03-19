@@ -116,6 +116,10 @@ func calculateNewDimensions(img image.Image, pixelSize int) int {
 	return result
 }
 
+func calcOneDimension(raw, pixelSize int) int {
+	return int(math.Ceil(float64(raw) / float64(pixelSize)))
+}
+
 func resize(img image.Image, newX, newY int) image.Image {
 	result := image.NewRGBA(image.Rect(0, 0, newX, newY))
 	draw.NearestNeighbor.Scale(result, result.Rect, img, img.Bounds(), draw.Over, nil)
