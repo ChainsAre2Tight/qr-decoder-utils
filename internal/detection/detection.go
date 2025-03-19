@@ -94,7 +94,7 @@ func cropFields(img image.Image, border image.Rectangle) (image.Image, error) {
 func detectPixelSize(img image.Image) (int, error) {
 	bounds := img.Bounds()
 
-	for d := 1; d < bounds.Max.X-5 && d < bounds.Max.Y-5; d++ {
+	for d := 1; d < bounds.Dx()-5 && d < bounds.Dy()-5; d++ {
 		x, y := bounds.Max.X-d, bounds.Min.Y+d
 
 		value := rgbaToValue(img.At(x, y))
