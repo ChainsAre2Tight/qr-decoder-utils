@@ -19,7 +19,7 @@ func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
 	if err != nil {
 		return image.Black, err
 	}
-	var newDimensions int
+	var newX, newY int
 	if sizeOverride == 0 {
 		log.Println("Size not specified, attempting to detect...")
 		log.Println("WARNING: current implementation allows only for QR code size detecion, other code formats are not supported")
@@ -31,17 +31,18 @@ func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
 
 		log.Println("Pixel size is", pixelSize)
 
-		newDimensions = calculateNewDimensions(cropped, pixelSize)
-		log.Println("Calculated dimesions:", newDimensions)
+		newX, newY = calculateNewDimensions(cropped, pixelSize)
+		log.Printf("Calculated dimesions: %dx%d", newX, newY)
 		log.Println("INFO: if determined code dimensions are wrong, force them with --size")
 	} else {
 		log.Println("Provided size override")
-		newDimensions = sizeOverride
+		newX = sizeOverride
+		newY = sizeOverride
 	}
 
-	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
+	log.Printf("Converting to QR %dx%d ", newX, newY)
 
-	resized := resize(cropped, newDimensions, newDimensions)
+	resized := resize(cropped, newX, newY)
 	return resized, nil
 }
 
