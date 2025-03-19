@@ -89,16 +89,18 @@ func cropFields(img image.Image, border image.Rectangle) (image.Image, error) {
 	return simg.SubImage(border), nil
 }
 
+// Detects pixel size of a QR code by scanning diagonally from upper-right corner
+// of the code until it comes across an all-white inverted L shape
 func detectPixelSize(img image.Image) (int, error) {
 	bounds := img.Bounds()
 
-	for d := 0; d < bounds.Max.X-5 && d < bounds.Max.Y-5; d++ {
-		x, y := bounds.Min.X+d, bounds.Min.Y+d
+	for d := 1; d < bounds.Max.X-5 && d < bounds.Max.Y-5; d++ {
+		x, y := bounds.Max.X-d, bounds.Min.Y+d
 
 		value := rgbaToValue(img.At(x, y))
-		for d := range 5 {
-			value += rgbaToValue(img.At(x+d+1, y))
-			value += rgbaToValue(img.At(x, y+d+1))
+		for f := range 5 {
+			value += rgbaToValue(img.At(x-f-1, y))
+			value += rgbaToValue(img.At(x, y+f+1))
 		}
 
 		if value > 500000 {
