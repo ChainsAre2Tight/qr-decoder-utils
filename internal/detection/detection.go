@@ -10,28 +10,32 @@ import (
 	"golang.org/x/image/draw"
 )
 
-func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
+func stripImage(img image.Image) (image.Image, error) {
 	border, err := detectBorders(img)
 	if err != nil {
-		return image.Black, err
+		return nil, err
 	}
 	cropped, err := cropFields(img, border)
 	if err != nil {
-		return image.Black, err
+		return nil, err
 	}
+	return cropped, nil
+}
+
+func resizeImage(img image.Image, sizeOverride int) (image.Image, error) {
 	var newX, newY int
 	if sizeOverride == 0 {
 		log.Println("Size not specified, attempting to detect...")
 		log.Println("WARNING: current implementation allows only for QR code size detecion, other code formats are not supported")
 
-		pixelSize, err := detectPixelSize(cropped)
+		pixelSize, err := detectPixelSize(img)
 		if err != nil {
 			return image.Black, err
 		}
 
 		log.Println("Pixel size is", pixelSize)
 
-		newX, newY = calculateNewDimensions(cropped, pixelSize)
+		newX, newY = calculateNewDimensions(img, pixelSize)
 		log.Printf("Calculated dimesions: %dx%d", newX, newY)
 		log.Println("INFO: if determined code dimensions are wrong, force them with --size")
 	} else {
@@ -42,7 +46,19 @@ func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
 
 	log.Printf("Converting to QR %dx%d ", newX, newY)
 
-	resized := resize(cropped, newX, newY)
+	resized := resize(img, newX, newY)
+	return resized, nil
+}
+
+func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
+	cropped, err := stripImage(img)
+	if err != nil {
+		return nil, err
+	}
+	resized, err := resizeImage(cropped, sizeOverride)
+	if err != nil {
+		return nil, err
+	}
 	return resized, nil
 }
 
