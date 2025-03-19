@@ -112,12 +112,12 @@ func detectPixelSize(img image.Image) (int, error) {
 		y = bounds.Min.Y
 
 		value = rgbaToValue(img.At(x, y))
-		for d := range 5 {
+		for d := range 3 {
 			value += rgbaToValue(img.At(x+d+1, y))
 			value += rgbaToValue(img.At(x, y+d+1))
 		}
 
-		if value > 500000 {
+		if value > 200000 {
 			return d - 1, nil
 		}
 	}
