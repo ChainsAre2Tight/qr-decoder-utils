@@ -110,10 +110,11 @@ func detectPixelSize(img image.Image) (int, error) {
 	return -1, fmt.Errorf("no pixel size detected")
 }
 
-func calculateNewDimensions(img image.Image, pixelSize int) int {
+func calculateNewDimensions(img image.Image, pixelSize int) (int, int) {
 	bounds := img.Bounds()
-	result := calcOneDimension(bounds.Dx(), pixelSize)
-	return result
+	resultX := calcOneDimension(bounds.Dx(), pixelSize)
+	resultY := calcOneDimension(bounds.Dy(), pixelSize)
+	return resultX, resultY
 }
 
 func calcOneDimension(raw, pixelSize int) int {
