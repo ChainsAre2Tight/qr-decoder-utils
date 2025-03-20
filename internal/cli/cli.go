@@ -104,7 +104,7 @@ func LoadAndConvert(inputFilenamePtr *string) [][]bool {
 
 	// detect borders and resize
 	validateOutputSize()
-	qr, err := detection.DetectQR(img, *outputSizePtr)
+	qr, err := detection.DetectCodeOnImage(img, *outputSizePtr)
 	if err != nil {
 		log.Fatal(err)
 	}
