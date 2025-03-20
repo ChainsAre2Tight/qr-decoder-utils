@@ -10,7 +10,7 @@ import (
 	"golang.org/x/image/draw"
 )
 
-func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
+func DetectCodeOnImage(img image.Image, sizeOverride int) (image.Image, error) {
 	border, err := detectBorders(img)
 	if err != nil {
 		return image.Black, err
