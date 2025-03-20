@@ -1,7 +1,7 @@
 package qr_v3
 
 import (
-	qrdecoder "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/qr_decoder"
+	qrdecoder "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/qr_decoder"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"

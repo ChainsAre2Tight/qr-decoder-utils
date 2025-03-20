@@ -1,7 +1,7 @@
 package bitreader
 
 import (
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )

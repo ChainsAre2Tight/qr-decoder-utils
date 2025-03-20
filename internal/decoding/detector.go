@@ -3,9 +3,9 @@ package decoding
 import (
 	"fmt"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v2"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v3"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/qr_v1"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/qr_v2"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/qr_v3"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 )
 
