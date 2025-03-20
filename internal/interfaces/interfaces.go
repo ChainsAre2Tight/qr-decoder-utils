@@ -22,6 +22,7 @@ type FormatInterface interface {
 type CodeInterface interface {
 	Detect([][]bool) bool
 	OOB() OutOfBoundsInterface
+	Decode([][]bool) (string, error)
 	ReadMetadata([][]bool) (ModeInterface, MaskInterface, error)
 	ReadFormat([][]bool, MaskInterface, BitReaderInterface) (FormatInterface, error)
 }
