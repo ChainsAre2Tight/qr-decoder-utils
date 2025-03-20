@@ -2,7 +2,6 @@ package qr_v2
 
 import (
 	qrdecoder "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/qr_decoder"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/qr_v1"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
@@ -27,16 +26,6 @@ func (QRVer2) Detect(matrix [][]bool) bool {
 
 func (QRVer2) OOB() interfaces.OutOfBoundsInterface {
 	return oob{}
-}
-
-// Inherited from QRVer1
-func (QRVer2) ReadMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInterface, error) {
-	return qr_v1.QRVer1{}.ReadMetadata(matrix)
-}
-
-// Inherited from QRVer1
-func (QRVer2) ReadFormat(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (interfaces.FormatInterface, error) {
-	return qr_v1.QRVer1{}.ReadFormat(matrix, mask, reader)
 }
 
 type oob struct{}
