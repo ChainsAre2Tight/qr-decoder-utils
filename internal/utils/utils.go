@@ -102,3 +102,11 @@ func ForceFileExtension(filepath, extension string) string {
 func GenerateRandomFilename() string {
 	return rand.String(8)
 }
+
+func StripReflectedName(s string) string {
+	if s[0] == '*' {
+		s = s[1:]
+	}
+	parts := strings.Split(s, ".")
+	return parts[len(parts)-1]
+}
