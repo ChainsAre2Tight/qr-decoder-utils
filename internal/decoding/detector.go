@@ -3,13 +3,13 @@ package decoding
 import (
 	"fmt"
 
-	qrdetection "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/type_detection"
+	qr "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 )
 
 func detectCodeType(matrix [][]bool) (interfaces.CodeInterface, error) {
 
-	code, ok := qrdetection.DetectQR(matrix)
+	code, ok := qr.DetectQR(matrix)
 	if ok {
 		return code, nil
 	}
