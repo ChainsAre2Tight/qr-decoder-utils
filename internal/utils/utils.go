@@ -5,6 +5,7 @@ import (
 	"math"
 	"path"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils/rand"
@@ -74,6 +75,13 @@ func BoolSliceToDecimal(slice []bool) int {
 		}
 	}
 	return result
+}
+
+func BytesToUTF8(in []byte) (string, error) {
+	if !utf8.Valid(in) {
+		return "", fmt.Errorf("byte array is not a valid utf-8 string")
+	}
+	return string(in), nil
 }
 
 func BytesToISO8859dash1(in []byte) (string, error) {
