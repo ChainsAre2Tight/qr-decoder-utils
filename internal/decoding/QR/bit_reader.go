@@ -1,21 +1,20 @@
-package bitreader
+package qr
 
 import (
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 type bitReader struct {
 	matrix   [][]bool
-	mask     interfaces.MaskInterface
+	mask     MaskInterface
 	position int
 	sequence [][2]int
 }
 
 func NewBitReader(
 	matrix [][]bool,
-	mask interfaces.MaskInterface,
+	mask MaskInterface,
 	oob interfaces.OutOfBoundsInterface,
 ) *bitReader {
 	return &bitReader{
@@ -61,7 +60,7 @@ func GenerateReadSequence(sizeX, sizeY int, oob interfaces.OutOfBoundsInterface)
 }
 
 func (r *bitReader) readOne() bool {
-	result := masks.AtMatrixXORMask(r.matrix, r.mask, r.sequence[r.position][0], r.sequence[r.position][1])
+	result := AtMatrixXORMask(r.matrix, r.mask, r.sequence[r.position][0], r.sequence[r.position][1])
 	r.position++
 	return result
 }

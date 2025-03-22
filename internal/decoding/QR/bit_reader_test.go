@@ -1,4 +1,4 @@
-package bitreader
+package qr
 
 import (
 	"fmt"

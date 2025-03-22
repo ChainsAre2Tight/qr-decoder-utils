@@ -5,8 +5,6 @@ import (
 	"log"
 	"reflect"
 
-	bitreader "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/bit_reader"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
@@ -112,7 +110,7 @@ func (q *QR) Decode(matrix [][]bool) (string, error) {
 	}
 
 	log.Println("Detected mask:", reflect.TypeOf(mask).Name())
-	reader := bitreader.NewBitReader(matrix, mask, q.OOB())
+	reader := NewBitReader(matrix, mask, q.OOB())
 
 	format, err := readFormat(reader)
 	if err != nil {
@@ -131,7 +129,7 @@ func (q *QR) Description() string {
 	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
 }
 
-func readMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInterface, error) {
+func readMetadata(matrix [][]bool) (interfaces.ModeInterface, MaskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
 	if err != nil {
@@ -144,7 +142,7 @@ func readMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInt
 	}
 
 	modeString := utils.BoolSliceToString(mode)
-	mask, ok := masks.Masks[modeString]
+	mask, ok := Masks[modeString]
 	if !ok {
 		return nil, nil, fmt.Errorf("no mask matches %s", modeString)
 	}
