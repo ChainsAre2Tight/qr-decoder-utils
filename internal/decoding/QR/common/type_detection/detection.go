@@ -9,10 +9,10 @@ import (
 // Refer to table 1 for size parameter and
 // table E.1 for list of alignment patterns
 var QR_CODES = []interfaces.CodeInterface{
-	&qr.QR{Size: 21},
-	&qr.QR{Size: 25, AlignmentPatterns: []int{6, 18}},
-	&qr.QR{Size: 29, AlignmentPatterns: []int{6, 22}},
-	&qr.QR{Size: 33, AlignmentPatterns: []int{6, 26}},
+	&qr.QR{Name: "QR Version 1", Size: 21, AlignmentPatterns: []int{}},
+	&qr.QR{Name: "QR Version 2", Size: 25, AlignmentPatterns: []int{6, 18}},
+	&qr.QR{Name: "QR Version 3", Size: 29, AlignmentPatterns: []int{6, 22}},
+	&qr.QR{Name: "QR Version 4", Size: 33, AlignmentPatterns: []int{6, 26}},
 }
 
 func DetectQR(matrix [][]bool) (interfaces.CodeInterface, bool) {

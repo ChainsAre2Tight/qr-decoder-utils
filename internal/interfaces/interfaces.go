@@ -23,6 +23,7 @@ type CodeInterface interface {
 	Detect([][]bool) bool
 	OOB() OutOfBoundsInterface
 	Decode([][]bool) (string, error)
+	Description() string
 }
 
 type BitReaderInterface interface {
