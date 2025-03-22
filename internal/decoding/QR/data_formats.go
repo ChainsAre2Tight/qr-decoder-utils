@@ -35,9 +35,11 @@ func (byteFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReade
 	// attempt utf 8 decoding
 	data, err := utils.BytesToUTF8(raw)
 	if err == nil {
+		log.Println("Content is a valid UTF-8 string, decoding...")
 		return data, err
 	}
 	// default to ISO8859-1
+	log.Println("Defaulting to ISO8859-1")
 	data, err = utils.BytesToISO8859dash1(raw)
 
 	return data, err
