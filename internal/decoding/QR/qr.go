@@ -2,7 +2,6 @@ package qr
 
 import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 // refer to table 3
@@ -17,44 +16,13 @@ type QR struct {
 	AlignmentPatterns []int
 }
 
-// Performs checks on a given matrix to determine if it contains
-// a QR code of specified parameters
-func (q *QR) Detect(matrix [][]bool) bool {
-
-	// check basic dimensions
-	if len(matrix) != q.Size || len(matrix[0]) != q.Size {
-		return false
-	}
-
-	// check for finder patterns
-	if !utils.IsSubmatrix(matrix, types.QRCorner, types.NewPoint(0, 0)) ||
-		!utils.IsSubmatrix(matrix, types.QRCorner, types.NewPoint(q.Size-7, 0)) ||
-		!utils.IsSubmatrix(matrix, types.QRCorner, types.NewPoint(0, q.Size-7)) {
-		return false
-	}
-
-	// check for alignment patterns, if any
-	for _, positionX := range q.AlignmentPatterns {
-		for _, positionY := range q.AlignmentPatterns {
-
-			// skip alignment patterns that coincide with finder patterns
-			if !validAlignmentPattern(positionX, positionY, q.Size) {
-				continue
-			}
-
-			if !utils.IsSubmatrix(matrix, types.QRCornerSmall, types.NewPoint(positionX-2, positionY-2)) {
-				return false
-			}
-		}
-	}
-
-	return true
-}
-
-// checks if an alignment pattern coincides with a finder pattern
-func validAlignmentPattern(centerX, centerY, size int) bool {
-	if centerX == 6 && centerY == 6 || centerX == size-7 && centerY == 6 || centerX == 6 && centerY == size-7 {
-		return false
-	}
-	return true
+// All hardcoded qr codes used in this app
+// Refer to table 1 for size parameter,
+// Refer to table 3 for content length parameters and
+// table E.1 for list of alignment patterns
+var QR_CODES = []*QR{
+	{Name: "QR Version 1", Size: 21, Cci: CCI1dash9, AlignmentPatterns: []int{}},
+	{Name: "QR Version 2", Size: 25, Cci: CCI1dash9, AlignmentPatterns: []int{6, 18}},
+	{Name: "QR Version 3", Size: 29, Cci: CCI1dash9, AlignmentPatterns: []int{6, 22}},
+	{Name: "QR Version 4", Size: 33, Cci: CCI1dash9, AlignmentPatterns: []int{6, 26}},
 }
