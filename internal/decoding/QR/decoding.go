@@ -9,6 +9,7 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
+// Decodes a QR code in a given matrix
 func (q *QR) Decode(matrix [][]bool) (string, error) {
 	_, mask, err := readMetadata(matrix)
 	if err != nil {
@@ -31,10 +32,7 @@ func (q *QR) Decode(matrix [][]bool) (string, error) {
 	return data, nil
 }
 
-func (q *QR) Description() string {
-	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
-}
-
+// Reads Mode and Mask of a QR coder in a given matrix
 func readMetadata(matrix [][]bool) (interfaces.ModeInterface, maskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
@@ -56,6 +54,7 @@ func readMetadata(matrix [][]bool) (interfaces.ModeInterface, maskInterface, err
 	return nil, mask, nil
 }
 
+// reads data fromat of a QR code in a given matrix
 func readFormat(reader *bitReader) (formatInterface, error) {
 	rawMetadata := reader.readMultiple(4)
 

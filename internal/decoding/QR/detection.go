@@ -5,6 +5,8 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
+// Checks if any of implemented QR codes
+// is present in the matrix
 func DetectQR(matrix [][]bool) (*QR, bool) {
 	for _, code := range QR_CODES {
 		ok := code.Detect(matrix)

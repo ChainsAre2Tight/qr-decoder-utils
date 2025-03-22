@@ -5,6 +5,7 @@ import (
 )
 
 type maskInterface interface {
+	// returns value of a maks at [x][y]
 	At(types.Point) bool
 }
 
@@ -28,11 +29,13 @@ var Masks = map[string]maskInterface{
 	"111": &Mask111{},
 }
 
+// returns value at matrix[x][y] XOR mask[x][y]
 func AtMatrixXORMask(matrix [][]bool, mask maskInterface, x, y int) bool {
 	// fmt.Println(x, y, matrix[x][y], mask.At(types.NewPoint(x, y)))
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 
+// generates NxN matrix containing given mask values
 func GenerateMaskedMatrix(n int, mask maskInterface) [][]bool {
 	result := make([][]bool, n)
 	for i := range n {

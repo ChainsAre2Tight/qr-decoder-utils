@@ -1,5 +1,7 @@
 package qr
 
+import "fmt"
+
 // Character Count Indicator length
 type cci struct {
 	Numeric      int
@@ -13,11 +15,17 @@ var CCI1dash9 = &cci{Numeric: 10, Alphanumeric: 9, Byte: 8, Kanji: 8}
 var CCI10dash26 = &cci{Numeric: 12, Alphanumeric: 11, Byte: 16, Kanji: 10}
 var CCI27dash40 = &cci{Numeric: 14, Alphanumeric: 13, Byte: 16, Kanji: 12}
 
+// QR code data
 type QR struct {
 	Name              string
 	Size              int
 	Cci               *cci
 	AlignmentPatterns []int
+}
+
+// Returns description of a QR code
+func (q *QR) Description() string {
+	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
 }
 
 // All hardcoded qr codes used in this app

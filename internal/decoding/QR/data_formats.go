@@ -9,6 +9,7 @@ import (
 )
 
 type formatInterface interface {
+	// Reads data of a QR code.
 	ReadData([][]bool, maskInterface, *bitReader, *cci) (string, error)
 }
 
