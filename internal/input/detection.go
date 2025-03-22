@@ -1,4 +1,4 @@
-package detection
+package input
 
 import (
 	"fmt"
