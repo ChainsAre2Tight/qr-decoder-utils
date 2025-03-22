@@ -67,7 +67,7 @@ func MatrixToExcelWithMasks(matrix [][]bool, filepath string) {
 	matrixToSheet(matrix, mainSheet)
 
 	for _, mask := range qr.Masks {
-		maskSheet, err := file.AddSheet(reflect.TypeOf(mask).Name())
+		maskSheet, err := file.AddSheet(utils.StripReflectedName(reflect.TypeOf(mask).String()))
 		if err != nil {
 			log.Fatal(err)
 		}
