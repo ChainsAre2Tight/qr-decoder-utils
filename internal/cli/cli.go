@@ -7,7 +7,7 @@ import (
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/conversion"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/masks"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/detection"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/input"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
@@ -104,7 +104,7 @@ func LoadAndConvert(inputFilenamePtr *string) [][]bool {
 
 	// detect borders and resize
 	validateOutputSize()
-	qr, err := detection.DetectQR(img, *outputSizePtr)
+	qr, err := detection.DetectCodeOnImage(img, *outputSizePtr)
 	if err != nil {
 		log.Fatal(err)
 	}

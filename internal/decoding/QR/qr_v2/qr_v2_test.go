@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	bitreader "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/common/bit_reader"
+	bitreader "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/bit_reader"
 )
 
 func TestQRV2Sequence(t *testing.T) {
