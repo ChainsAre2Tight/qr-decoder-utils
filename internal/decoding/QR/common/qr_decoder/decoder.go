@@ -27,7 +27,7 @@ func DecodeQR(matrix [][]bool, code interfaces.CodeInterface) (string, error) {
 	}
 	log.Println("Detected format:", reflect.TypeOf(format).Name())
 
-	data, err := format.ReadData(matrix, mask, reader)
+	data, err := format.ReadData(matrix, mask, reader, code.CCI())
 	if err != nil {
 		return "", err
 	}
