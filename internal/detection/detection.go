@@ -10,38 +10,55 @@ import (
 	"golang.org/x/image/draw"
 )
 
-func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
+func stripImage(img image.Image) (image.Image, error) {
 	border, err := detectBorders(img)
 	if err != nil {
-		return image.Black, err
+		return nil, err
 	}
 	cropped, err := cropFields(img, border)
 	if err != nil {
-		return image.Black, err
+		return nil, err
 	}
-	var newDimensions int
+	return cropped, nil
+}
+
+func resizeImage(img image.Image, sizeOverride int) (image.Image, error) {
+	var newX, newY int
 	if sizeOverride == 0 {
 		log.Println("Size not specified, attempting to detect...")
 		log.Println("WARNING: current implementation allows only for QR code size detecion, other code formats are not supported")
 
-		pixelSize, err := detectPixelSize(cropped)
+		pixelSize, err := detectPixelSize(img)
 		if err != nil {
 			return image.Black, err
 		}
 
 		log.Println("Pixel size is", pixelSize)
 
-		newDimensions = calculateNewDimensions(cropped, pixelSize)
-		log.Println("Calculated dimesions:", newDimensions)
+		newX, newY = calculateNewDimensions(img, pixelSize)
+		log.Printf("Calculated dimesions: %dx%d", newX, newY)
 		log.Println("INFO: if determined code dimensions are wrong, force them with --size")
 	} else {
 		log.Println("Provided size override")
-		newDimensions = sizeOverride
+		newX = sizeOverride
+		newY = sizeOverride
 	}
 
-	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
+	log.Printf("Converting to QR %dx%d ", newX, newY)
 
-	resized := resize(cropped, newDimensions)
+	resized := resize(img, newX, newY)
+	return resized, nil
+}
+
+func DetectQR(img image.Image, sizeOverride int) (image.Image, error) {
+	cropped, err := stripImage(img)
+	if err != nil {
+		return nil, err
+	}
+	resized, err := resizeImage(cropped, sizeOverride)
+	if err != nil {
+		return nil, err
+	}
 	return resized, nil
 }
 
@@ -110,14 +127,19 @@ func detectPixelSize(img image.Image) (int, error) {
 	return -1, fmt.Errorf("no pixel size detected")
 }
 
-func calculateNewDimensions(img image.Image, pixelSize int) int {
+func calculateNewDimensions(img image.Image, pixelSize int) (int, int) {
 	bounds := img.Bounds()
-	result := int(math.Ceil(float64(bounds.Dx()) / float64(pixelSize)))
-	return result
+	resultX := calcOneDimension(bounds.Dx(), pixelSize)
+	resultY := calcOneDimension(bounds.Dy(), pixelSize)
+	return resultX, resultY
 }
 
-func resize(img image.Image, newDimensions int) image.Image {
-	result := image.NewRGBA(image.Rect(0, 0, newDimensions, newDimensions))
+func calcOneDimension(raw, pixelSize int) int {
+	return int(math.Ceil(float64(raw) / float64(pixelSize)))
+}
+
+func resize(img image.Image, newX, newY int) image.Image {
+	result := image.NewRGBA(image.Rect(0, 0, newX, newY))
 	draw.NearestNeighbor.Scale(result, result.Rect, img, img.Bounds(), draw.Over, nil)
 	return result
 }
