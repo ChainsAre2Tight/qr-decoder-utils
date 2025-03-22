@@ -110,7 +110,7 @@ func (q *QR) Decode(matrix [][]bool) (string, error) {
 	}
 
 	log.Println("Detected mask:", reflect.TypeOf(mask).Name())
-	reader := NewBitReader(matrix, mask, q.OOB())
+	reader := newBitReader(matrix, mask, q.OOB())
 
 	format, err := readFormat(reader)
 	if err != nil {
@@ -150,8 +150,8 @@ func readMetadata(matrix [][]bool) (interfaces.ModeInterface, MaskInterface, err
 	return nil, mask, nil
 }
 
-func readFormat(reader interfaces.BitReaderInterface) (formatInterface, error) {
-	rawMetadata := reader.ReadMultiple(4)
+func readFormat(reader *bitReader) (formatInterface, error) {
+	rawMetadata := reader.readMultiple(4)
 
 	metadataString := utils.BoolSliceToString(rawMetadata)
 	format, ok := SUPPORTED_FORMATS[metadataString]

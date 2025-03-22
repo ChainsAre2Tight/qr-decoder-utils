@@ -12,8 +12,3 @@ type CodeInterface interface {
 	Decode([][]bool) (string, error)
 	Description() string
 }
-
-type BitReaderInterface interface {
-	ReadMultiple(int) []bool
-	ReadBytes() byte
-}

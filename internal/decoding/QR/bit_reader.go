@@ -12,7 +12,7 @@ type bitReader struct {
 	sequence [][2]int
 }
 
-func NewBitReader(
+func newBitReader(
 	matrix [][]bool,
 	mask MaskInterface,
 	oob interfaces.OutOfBoundsInterface,
@@ -21,12 +21,12 @@ func NewBitReader(
 		matrix:   matrix,
 		mask:     mask,
 		position: 0,
-		sequence: GenerateReadSequence(len(matrix), len(matrix[0]), oob),
+		sequence: generateReadSequence(len(matrix), len(matrix[0]), oob),
 	}
 }
 
 // !!! megagovnokod !!! N^2 time, N^2 space
-func GenerateReadSequence(sizeX, sizeY int, oob interfaces.OutOfBoundsInterface) [][2]int {
+func generateReadSequence(sizeX, sizeY int, oob interfaces.OutOfBoundsInterface) [][2]int {
 	up := true
 
 	result := make([][2]int, 0, sizeX*sizeY)
@@ -65,7 +65,7 @@ func (r *bitReader) readOne() bool {
 	return result
 }
 
-func (r *bitReader) ReadMultiple(n int) []bool {
+func (r *bitReader) readMultiple(n int) []bool {
 	result := make([]bool, n)
 	for i := range result {
 		result[i] = r.readOne()
@@ -74,7 +74,7 @@ func (r *bitReader) ReadMultiple(n int) []bool {
 	return result
 }
 
-func (r *bitReader) ReadBytes() byte {
-	raw := r.ReadMultiple(8)
+func (r *bitReader) readBytes() byte {
+	raw := r.readMultiple(8)
 	return byte(utils.BoolSliceToDecimal(raw))
 }

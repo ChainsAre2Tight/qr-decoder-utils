@@ -5,13 +5,12 @@ import (
 	"log"
 	"strings"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 type formatInterface interface {
-	ReadData([][]bool, MaskInterface, interfaces.BitReaderInterface, *types.CCI) (string, error)
+	ReadData([][]bool, MaskInterface, *bitReader, *types.CCI) (string, error)
 }
 
 type integerFormat struct{}
@@ -22,15 +21,15 @@ var SUPPORTED_FORMATS = map[string]formatInterface{
 	"0100": byteFormat{},
 }
 
-func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface, reader interfaces.BitReaderInterface, cci *types.CCI) (string, error) {
-	length := utils.BoolSliceToDecimal(reader.ReadMultiple(cci.Byte))
+func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface, reader *bitReader, cci *types.CCI) (string, error) {
+	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Byte))
 
 	log.Println("Detected content length:", length)
 
 	raw := make([]byte, length)
 
 	for i := range length {
-		raw[i] = reader.ReadBytes()
+		raw[i] = reader.readBytes()
 	}
 
 	// attempt utf 8 decoding
@@ -44,9 +43,9 @@ func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface, reader interface
 	return data, err
 }
 
-func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface, reader interfaces.BitReaderInterface, cci *types.CCI) (string, error) {
+func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface, reader *bitReader, cci *types.CCI) (string, error) {
 	// read length
-	length := utils.BoolSliceToDecimal(reader.ReadMultiple(cci.Numeric))
+	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Numeric))
 
 	log.Println("Detected content length:", length)
 
@@ -57,7 +56,7 @@ func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface, reader interf
 
 	// read 3-groups
 	for range countFull {
-		raw := utils.BoolSliceToDecimal(reader.ReadMultiple(10))
+		raw := utils.BoolSliceToDecimal(reader.readMultiple(10))
 		resultBuilder.WriteString(fmt.Sprintf("%03d", raw))
 	}
 
@@ -65,10 +64,10 @@ func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface, reader interf
 	var raw int
 
 	if countRemainder == 1 {
-		raw = utils.BoolSliceToDecimal(reader.ReadMultiple(4))
+		raw = utils.BoolSliceToDecimal(reader.readMultiple(4))
 		resultBuilder.WriteString(fmt.Sprintf("%01d", raw))
 	} else {
-		raw = utils.BoolSliceToDecimal(reader.ReadMultiple(7))
+		raw = utils.BoolSliceToDecimal(reader.readMultiple(7))
 		resultBuilder.WriteString(fmt.Sprintf("%02d", raw))
 	}
 

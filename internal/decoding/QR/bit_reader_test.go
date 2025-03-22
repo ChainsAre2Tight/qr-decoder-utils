@@ -55,7 +55,7 @@ func TestGenReadSequence(t *testing.T) {
 		t.Run(
 			fmt.Sprintf("%dx%d, %s", tt.in.x, tt.in.y, reflect.TypeOf(tt.in.oob)),
 			func(t *testing.T) {
-				result := GenerateReadSequence(tt.in.x, tt.in.y, tt.in.oob)
+				result := generateReadSequence(tt.in.x, tt.in.y, tt.in.oob)
 				if !reflect.DeepEqual(result, tt.out) {
 					t.Error("\ngot ", result, "\nwant", tt.out)
 				}
@@ -78,7 +78,7 @@ func (qrv1oob) SkipColumn(x int) bool {
 }
 
 func TestQRV1Sequence(t *testing.T) {
-	sequence := GenerateReadSequence(21, 21, qrv1oob{})
+	sequence := generateReadSequence(21, 21, qrv1oob{})
 	expectedSequence := [][2]int{
 		// up x3
 		{20, 20}, {19, 20}, {20, 19}, {19, 19}, {20, 18}, {19, 18}, {20, 17}, {19, 17},
@@ -160,7 +160,7 @@ func TestQRV2Sequence(t *testing.T) {
 		{15, 20}, {15, 19}, {15, 18}, {15, 17},
 		{15, 16}, {16, 15}, {15, 15}, {16, 14}, {15, 14}, {16, 13}, {15, 13},
 	}
-	sequence := GenerateReadSequence(25, 25, qrv2oob{})[:len(expectedSequence)]
+	sequence := generateReadSequence(25, 25, qrv2oob{})[:len(expectedSequence)]
 	if !reflect.DeepEqual(sequence, expectedSequence) {
 		t.Error("\ngot\n", sequence, "\nwant\n", expectedSequence)
 	}
