@@ -2,7 +2,6 @@ package decoding
 
 import (
 	"log"
-	"reflect"
 )
 
 func Decode(matrix [][]bool) (string, error) {
@@ -10,7 +9,7 @@ func Decode(matrix [][]bool) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	log.Println("Detected code type:", reflect.TypeOf(code).Name())
+	log.Println("Detected code type:", code.Description())
 	value, err := code.Decode(matrix)
 	if err != nil {
 		return "", err
