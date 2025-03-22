@@ -31,7 +31,7 @@ func (q *QR) Detect(matrix [][]bool) bool {
 	// check for alignment patterns, if any
 	for _, positionX := range q.AlignmentPatterns {
 		for _, positionY := range q.AlignmentPatterns {
-			if !utils.IsSubmatrix(matrix, types.QRCornerSmall, types.NewPoint(positionX, positionY)) {
+			if !utils.IsSubmatrix(matrix, types.QRCornerSmall, types.NewPoint(positionX-2, positionY-2)) {
 				return false
 			}
 		}
@@ -60,7 +60,7 @@ func (o *oob) SkipCell(x, y int) bool {
 	// alignment patterns
 	for _, positionX := range o.QR.AlignmentPatterns {
 		for _, positionY := range o.QR.AlignmentPatterns {
-			if x >= positionX && x <= positionY+4 && y >= positionX && y <= positionY+4 {
+			if x >= positionX-2 && x <= positionY+2 && y >= positionX-2 && y <= positionY+2 {
 				return true
 			}
 		}
