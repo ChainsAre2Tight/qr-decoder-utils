@@ -11,8 +11,7 @@ func Decode(matrix [][]bool) (string, error) {
 		return "", err
 	}
 	log.Println("Detected code type:", reflect.TypeOf(code).Name())
-	decoder := newDecoder(matrix, code)
-	value, err := decoder.decode()
+	value, err := code.Decode(matrix)
 	if err != nil {
 		return "", err
 	}
