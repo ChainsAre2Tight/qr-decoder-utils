@@ -1,6 +1,8 @@
 package qr
 
 import (
+	"fmt"
+
 	qrdecoder "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/qr_decoder"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
@@ -8,6 +10,7 @@ import (
 )
 
 type QR struct {
+	Name              string
 	Size              int
 	AlignmentPatterns []int
 }
@@ -95,4 +98,8 @@ func (q *QR) OOB() interfaces.OutOfBoundsInterface {
 
 func (q *QR) Decode(matrix [][]bool) (string, error) {
 	return qrdecoder.DecodeQR(matrix, q)
+}
+
+func (q *QR) Description() string {
+	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
 }
