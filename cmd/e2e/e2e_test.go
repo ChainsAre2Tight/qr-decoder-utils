@@ -17,6 +17,7 @@ func TestDecoding(t *testing.T) {
 		{"../../data/tests/qrv1/time.gif", "time"},
 		{"../../data/tests/qrv2/35numbers.gif", "33290056695773232123423233681965212"},
 		{"../../data/tests/qrv3/manycharacters.png", "abac4814baba6464cape1551dung4567etch"},
+		{"../../data/tests/qrv4/esenin.png", "Жизнь - обман с чарующей тоскою /С. Есенин"},
 	}
 
 	for _, tt := range tests {
