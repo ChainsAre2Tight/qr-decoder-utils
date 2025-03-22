@@ -31,12 +31,26 @@ func (q *QR) Detect(matrix [][]bool) bool {
 	// check for alignment patterns, if any
 	for _, positionX := range q.AlignmentPatterns {
 		for _, positionY := range q.AlignmentPatterns {
+
+			// skip alignment patterns that coincide with finder patterns
+			if !validAlignmentPattern(positionX, positionY, q.Size) {
+				continue
+			}
+
 			if !utils.IsSubmatrix(matrix, types.QRCornerSmall, types.NewPoint(positionX-2, positionY-2)) {
 				return false
 			}
 		}
 	}
 
+	return true
+}
+
+// checks if an alignment pattern coincides with a finder pattern
+func validAlignmentPattern(centerX, centerY, size int) bool {
+	if centerX == 6 && centerY == 6 || centerX == size-7 && centerY == 6 || centerX == 6 && centerY == size-7 {
+		return false
+	}
 	return true
 }
 
@@ -60,12 +74,17 @@ func (o *oob) SkipCell(x, y int) bool {
 	// alignment patterns
 	for _, positionX := range o.QR.AlignmentPatterns {
 		for _, positionY := range o.QR.AlignmentPatterns {
+			// skip alignment patterns that coincide with finder patterns
+			if !validAlignmentPattern(positionX, positionY, o.QR.Size) {
+				continue
+			}
 			if x >= positionX-2 && x <= positionY+2 && y >= positionX-2 && y <= positionY+2 {
 				return true
 			}
 		}
 
 	}
+	// TODO: check for encoding data
 
 	return false
 }

@@ -7,9 +7,9 @@ import (
 
 var QR_CODES = []interfaces.CodeInterface{
 	&qr.QR{Size: 21},
-	&qr.QR{Size: 25, AlignmentPatterns: []int{18}},
-	&qr.QR{Size: 29, AlignmentPatterns: []int{22}},
-	&qr.QR{Size: 33, AlignmentPatterns: []int{26}},
+	&qr.QR{Size: 25, AlignmentPatterns: []int{6, 18}},
+	&qr.QR{Size: 29, AlignmentPatterns: []int{6, 22}},
+	&qr.QR{Size: 33, AlignmentPatterns: []int{6, 26}},
 }
 
 func DetectQR(matrix [][]bool) (interfaces.CodeInterface, bool) {
