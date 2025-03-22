@@ -16,11 +16,12 @@ type MaskInterface interface {
 type ModeInterface interface{}
 
 type FormatInterface interface {
-	ReadData([][]bool, MaskInterface, BitReaderInterface) (string, error)
+	ReadData([][]bool, MaskInterface, BitReaderInterface, *types.CCI) (string, error)
 }
 
 type CodeInterface interface {
 	Detect([][]bool) bool
+	CCI() *types.CCI
 	OOB() OutOfBoundsInterface
 	Decode([][]bool) (string, error)
 	Description() string

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
@@ -18,8 +19,8 @@ var SUPPORTED_FORMATS = map[string]interfaces.FormatInterface{
 	"0100": byteFormat{},
 }
 
-func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
-	length := utils.BoolSliceToDecimal(reader.ReadMultiple(8)) // changes depending on QR version, this one is valid for vesions 1-10
+func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface, cci *types.CCI) (string, error) {
+	length := utils.BoolSliceToDecimal(reader.ReadMultiple(cci.Byte))
 
 	log.Println("Detected content length:", length)
 
@@ -40,9 +41,9 @@ func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reade
 	return data, err
 }
 
-func (integerFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
+func (integerFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface, cci *types.CCI) (string, error) {
 	// read length
-	length := utils.BoolSliceToDecimal(reader.ReadMultiple(10)) // changes depending on QR version, this one is valid for vesions 1-10
+	length := utils.BoolSliceToDecimal(reader.ReadMultiple(cci.Numeric))
 
 	log.Println("Detected content length:", length)
 

@@ -9,7 +9,8 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
-var CCI1dash9 = &types.CCI{Numeric: 10, Alphanumeric: 9, Byte: 16, Kanji: 8}
+// refer to table 3
+var CCI1dash9 = &types.CCI{Numeric: 10, Alphanumeric: 9, Byte: 8, Kanji: 8}
 var CCI10dash26 = &types.CCI{Numeric: 12, Alphanumeric: 11, Byte: 16, Kanji: 10}
 var CCI27dash40 = &types.CCI{Numeric: 14, Alphanumeric: 13, Byte: 16, Kanji: 12}
 
@@ -107,4 +108,8 @@ func (q *QR) Decode(matrix [][]bool) (string, error) {
 
 func (q *QR) Description() string {
 	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
+}
+
+func (q *QR) CCI() *types.CCI {
+	return q.Cci
 }
