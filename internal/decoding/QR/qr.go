@@ -129,7 +129,7 @@ func (q *QR) Description() string {
 	return fmt.Sprintf("%s (%dx%d)", q.Name, q.Size, q.Size)
 }
 
-func readMetadata(matrix [][]bool) (interfaces.ModeInterface, MaskInterface, error) {
+func readMetadata(matrix [][]bool) (interfaces.ModeInterface, maskInterface, error) {
 	// omit first two bits, mode is not implemented
 	mode, err := utils.ReadMatrixRow(matrix, 8, 2, 5)
 	if err != nil {

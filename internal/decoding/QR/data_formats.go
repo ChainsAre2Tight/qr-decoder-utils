@@ -10,18 +10,18 @@ import (
 )
 
 type formatInterface interface {
-	ReadData([][]bool, MaskInterface, *bitReader, *types.CCI) (string, error)
+	ReadData([][]bool, maskInterface, *bitReader, *types.CCI) (string, error)
 }
 
 type integerFormat struct{}
 type byteFormat struct{}
 
 var SUPPORTED_FORMATS = map[string]formatInterface{
-	"0001": integerFormat{},
-	"0100": byteFormat{},
+	"0001": &integerFormat{},
+	"0100": &byteFormat{},
 }
 
-func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface, reader *bitReader, cci *types.CCI) (string, error) {
+func (byteFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *types.CCI) (string, error) {
 	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Byte))
 
 	log.Println("Detected content length:", length)
@@ -43,7 +43,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask MaskInterface, reader *bitReade
 	return data, err
 }
 
-func (integerFormat) ReadData(matrix [][]bool, mask MaskInterface, reader *bitReader, cci *types.CCI) (string, error) {
+func (integerFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *types.CCI) (string, error) {
 	// read length
 	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Numeric))
 

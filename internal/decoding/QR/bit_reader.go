@@ -7,14 +7,14 @@ import (
 
 type bitReader struct {
 	matrix   [][]bool
-	mask     MaskInterface
+	mask     maskInterface
 	position int
 	sequence [][2]int
 }
 
 func newBitReader(
 	matrix [][]bool,
-	mask MaskInterface,
+	mask maskInterface,
 	oob interfaces.OutOfBoundsInterface,
 ) *bitReader {
 	return &bitReader{

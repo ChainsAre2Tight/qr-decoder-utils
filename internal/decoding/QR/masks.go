@@ -4,7 +4,7 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 )
 
-type MaskInterface interface {
+type maskInterface interface {
 	At(types.Point) bool
 }
 
@@ -17,23 +17,23 @@ type Mask101 struct{}
 type Mask110 struct{}
 type Mask111 struct{}
 
-var Masks = map[string]MaskInterface{
-	"000": Mask000{},
-	"001": Mask001{},
-	"010": Mask010{},
-	"011": Mask011{},
-	"100": Mask100{},
-	"101": Mask101{},
-	"110": Mask110{},
-	"111": Mask111{},
+var Masks = map[string]maskInterface{
+	"000": &Mask000{},
+	"001": &Mask001{},
+	"010": &Mask010{},
+	"011": &Mask011{},
+	"100": &Mask100{},
+	"101": &Mask101{},
+	"110": &Mask110{},
+	"111": &Mask111{},
 }
 
-func AtMatrixXORMask(matrix [][]bool, mask MaskInterface, x, y int) bool {
+func AtMatrixXORMask(matrix [][]bool, mask maskInterface, x, y int) bool {
 	// fmt.Println(x, y, matrix[x][y], mask.At(types.NewPoint(x, y)))
 	return matrix[x][y] != mask.At(types.NewPoint(x, y))
 }
 
-func GenerateMaskedMatrix(n int, mask MaskInterface) [][]bool {
+func GenerateMaskedMatrix(n int, mask maskInterface) [][]bool {
 	result := make([][]bool, n)
 	for i := range n {
 		result[i] = make([]bool, n)
