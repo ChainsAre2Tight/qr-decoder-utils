@@ -1,7 +1,6 @@
 package qr
 
 import (
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
@@ -12,10 +11,50 @@ type bitReader struct {
 	sequence [][2]int
 }
 
+type outOfBoundsInterface interface {
+	SkipCell(x, y int) bool
+	SkipColumn(x int) bool
+}
+
+type outOfBounds struct {
+	QR *QR
+}
+
+func (o *outOfBounds) SkipColumn(x int) bool {
+	return x == 6
+}
+
+func (o *outOfBounds) SkipCell(x, y int) bool {
+	// horizontal timing pattern
+	if y == 6 {
+		return true
+	}
+	// finder patterns
+	if x <= 8 && y <= 8 || x <= 8 && y >= o.QR.Size-8 || x >= o.QR.Size-8 && y <= 8 {
+		return true
+	}
+	// alignment patterns
+	for _, positionX := range o.QR.AlignmentPatterns {
+		for _, positionY := range o.QR.AlignmentPatterns {
+			// skip alignment patterns that coincide with finder patterns
+			if !validAlignmentPattern(positionX, positionY, o.QR.Size) {
+				continue
+			}
+			if x >= positionX-2 && x <= positionY+2 && y >= positionX-2 && y <= positionY+2 {
+				return true
+			}
+		}
+
+	}
+	// TODO: check for encoding data (qr v7 and above)
+
+	return false
+}
+
 func newBitReader(
 	matrix [][]bool,
 	mask maskInterface,
-	oob interfaces.OutOfBoundsInterface,
+	oob outOfBoundsInterface,
 ) *bitReader {
 	return &bitReader{
 		matrix:   matrix,
@@ -26,7 +65,7 @@ func newBitReader(
 }
 
 // !!! megagovnokod !!! N^2 time, N^2 space
-func generateReadSequence(sizeX, sizeY int, oob interfaces.OutOfBoundsInterface) [][2]int {
+func generateReadSequence(sizeX, sizeY int, oob outOfBoundsInterface) [][2]int {
 	up := true
 
 	result := make([][2]int, 0, sizeX*sizeY)

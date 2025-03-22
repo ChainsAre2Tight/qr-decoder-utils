@@ -1,10 +1,5 @@
 package interfaces
 
-type OutOfBoundsInterface interface {
-	SkipCell(x, y int) bool
-	SkipColumn(x int) bool
-}
-
 type ModeInterface interface{}
 
 type CodeInterface interface {
