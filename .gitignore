@@ -6,4 +6,4 @@
 bin/*
 
 !.gitkeep
-!data/tests/**/*
+!cmd/e2e/data**/*
