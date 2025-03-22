@@ -20,6 +20,7 @@ var SUPPORTED_FORMATS = map[string]interfaces.FormatInterface{
 
 func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(8)) // changes depending on QR version, this one is valid for vesions 1-10
+
 	log.Println("Detected content length:", length)
 
 	raw := make([]byte, length)
@@ -33,6 +34,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reade
 	if err == nil {
 		return data, err
 	}
+ 
 	// default to ISO8859-1
 	data, err = utils.BytesToISO8859dash1(raw)
 
@@ -42,6 +44,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reade
 func (integerFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reader interfaces.BitReaderInterface) (string, error) {
 	// read length
 	length := utils.BoolSliceToDecimal(reader.ReadMultiple(10)) // changes depending on QR version, this one is valid for vesions 1-10
+
 	log.Println("Detected content length:", length)
 
 	var resultBuilder strings.Builder
