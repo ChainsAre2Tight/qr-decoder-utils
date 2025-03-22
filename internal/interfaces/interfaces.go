@@ -15,10 +15,6 @@ type MaskInterface interface {
 
 type ModeInterface interface{}
 
-type FormatInterface interface {
-	ReadData([][]bool, MaskInterface, BitReaderInterface, *types.CCI) (string, error)
-}
-
 type CodeInterface interface {
 	Detect([][]bool) bool
 	Decode([][]bool) (string, error)

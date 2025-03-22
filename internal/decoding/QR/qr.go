@@ -6,7 +6,6 @@ import (
 	"reflect"
 
 	bitreader "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/bit_reader"
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/data_formats"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/interfaces"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
@@ -153,11 +152,11 @@ func readMetadata(matrix [][]bool) (interfaces.ModeInterface, interfaces.MaskInt
 	return nil, mask, nil
 }
 
-func readFormat(reader interfaces.BitReaderInterface) (interfaces.FormatInterface, error) {
+func readFormat(reader interfaces.BitReaderInterface) (formatInterface, error) {
 	rawMetadata := reader.ReadMultiple(4)
 
 	metadataString := utils.BoolSliceToString(rawMetadata)
-	format, ok := data_formats.SUPPORTED_FORMATS[metadataString]
+	format, ok := SUPPORTED_FORMATS[metadataString]
 	if !ok {
 		return nil, fmt.Errorf("format %s is unknown or is not implemented", metadataString)
 	}

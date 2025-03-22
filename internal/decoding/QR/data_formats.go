@@ -1,4 +1,4 @@
-package data_formats
+package qr
 
 import (
 	"fmt"
@@ -10,11 +10,14 @@ import (
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
-type integerFormat struct{}
+type formatInterface interface {
+	ReadData([][]bool, interfaces.MaskInterface, interfaces.BitReaderInterface, *types.CCI) (string, error)
+}
 
+type integerFormat struct{}
 type byteFormat struct{}
 
-var SUPPORTED_FORMATS = map[string]interfaces.FormatInterface{
+var SUPPORTED_FORMATS = map[string]formatInterface{
 	"0001": integerFormat{},
 	"0100": byteFormat{},
 }
