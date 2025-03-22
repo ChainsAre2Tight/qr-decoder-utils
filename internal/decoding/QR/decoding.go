@@ -16,14 +16,14 @@ func (q *QR) Decode(matrix [][]bool) (string, error) {
 		return "", err
 	}
 
-	log.Println("Detected mask:", reflect.TypeOf(mask).Name())
+	log.Println("Detected mask:", reflect.TypeOf(mask))
 	reader := newBitReader(matrix, mask, &outOfBounds{QR: q})
 
 	format, err := readFormat(reader)
 	if err != nil {
 		return "", err
 	}
-	log.Println("Detected format:", reflect.TypeOf(format).Name())
+	log.Println("Detected format:", reflect.TypeOf(format))
 
 	data, err := format.ReadData(matrix, mask, reader, q.Cci)
 	if err != nil {
