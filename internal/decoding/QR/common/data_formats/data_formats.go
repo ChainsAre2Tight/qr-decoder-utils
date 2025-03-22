@@ -34,7 +34,6 @@ func (byteFormat) ReadData(matrix [][]bool, mask interfaces.MaskInterface, reade
 	if err == nil {
 		return data, err
 	}
- 
 	// default to ISO8859-1
 	data, err = utils.BytesToISO8859dash1(raw)
 
