@@ -21,8 +21,6 @@ type FormatInterface interface {
 
 type CodeInterface interface {
 	Detect([][]bool) bool
-	CCI() *types.CCI
-	OOB() OutOfBoundsInterface
 	Decode([][]bool) (string, error)
 	Description() string
 }
