@@ -5,12 +5,11 @@ import (
 	"log"
 	"strings"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
 type formatInterface interface {
-	ReadData([][]bool, maskInterface, *bitReader, *types.CCI) (string, error)
+	ReadData([][]bool, maskInterface, *bitReader, *cci) (string, error)
 }
 
 type integerFormat struct{}
@@ -21,7 +20,7 @@ var SUPPORTED_FORMATS = map[string]formatInterface{
 	"0100": &byteFormat{},
 }
 
-func (byteFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *types.CCI) (string, error) {
+func (byteFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *cci) (string, error) {
 	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Byte))
 
 	log.Println("Detected content length:", length)
@@ -43,7 +42,7 @@ func (byteFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReade
 	return data, err
 }
 
-func (integerFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *types.CCI) (string, error) {
+func (integerFormat) ReadData(matrix [][]bool, mask maskInterface, reader *bitReader, cci *cci) (string, error) {
 	// read length
 	length := utils.BoolSliceToDecimal(reader.readMultiple(cci.Numeric))
 
