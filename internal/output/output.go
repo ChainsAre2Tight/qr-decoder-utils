@@ -8,7 +8,7 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR/common/masks"
+	qr "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 	"github.com/tealeg/xlsx"
 )
@@ -66,12 +66,12 @@ func MatrixToExcelWithMasks(matrix [][]bool, filepath string) {
 	}
 	matrixToSheet(matrix, mainSheet)
 
-	for _, mask := range masks.Masks {
+	for _, mask := range qr.Masks {
 		maskSheet, err := file.AddSheet(reflect.TypeOf(mask).Name())
 		if err != nil {
 			log.Fatal(err)
 		}
-		matrixToSheet(masks.GenerateMaskedMatrix(len(matrix), mask), maskSheet)
+		matrixToSheet(qr.GenerateMaskedMatrix(len(matrix), mask), maskSheet)
 	}
 
 	log.Println("Writing code and masks to", name)
