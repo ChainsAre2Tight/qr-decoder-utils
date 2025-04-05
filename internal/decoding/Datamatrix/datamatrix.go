@@ -1,5 +1,7 @@
 package datamatrix
 
+import "fmt"
+
 type datamatrix struct {
 	x, y int
 }
@@ -18,7 +20,7 @@ func (d *datamatrix) Decode([][]bool) (string, error) {
 
 // Description implements interfaces.CodeInterface.
 func (d *datamatrix) Description() string {
-	panic("unimplemented")
+	return fmt.Sprintf("ECC 200 Datamatrix (%dx%d)", d.x, d.y)
 }
 
 // Detect implements interfaces.CodeInterface.
@@ -48,6 +50,6 @@ func DetetcDatamatrix(matrix [][]bool) (*datamatrix, bool) {
 	// or just YOLO it
 
 	// construct datamatrix struc based on calculated parameters
-	code := NewDatamatrix(len(matrix)-1, len(matrix[0])-1)
+	code := NewDatamatrix(len(matrix)-2, len(matrix[0])-2)
 	return code, true
 }
