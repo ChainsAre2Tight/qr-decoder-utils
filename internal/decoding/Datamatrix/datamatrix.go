@@ -1,26 +1,38 @@
 package datamatrix
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
+)
 
 type datamatrix struct {
-	x, y int
+	X, Y int
 }
 
 func NewDatamatrix(X, Y int) *datamatrix {
 	return &datamatrix{
-		x: X,
-		y: Y,
+		X: X,
+		Y: Y,
 	}
 }
 
 // Decode implements interfaces.CodeInterface.
-func (d *datamatrix) Decode([][]bool) (string, error) {
-	panic("unimplemented")
+func (d *datamatrix) Decode(matrix [][]bool) (string, error) {
+	stream := d.matrixToBitStream(matrix)
+	fmt.Println(stream)
+
+	for i := range len(stream) / 8 {
+		chr := byte(utils.BoolSliceToDecimal(stream[8*i:8*i+1]) - 1)
+
+		fmt.Println(chr)
+	}
+	return "", nil
 }
 
 // Description implements interfaces.CodeInterface.
 func (d *datamatrix) Description() string {
-	return fmt.Sprintf("ECC 200 Datamatrix (%dx%d)", d.x, d.y)
+	return fmt.Sprintf("ECC 200 Datamatrix (%dx%d)", d.X, d.Y)
 }
 
 // Detect implements interfaces.CodeInterface.
