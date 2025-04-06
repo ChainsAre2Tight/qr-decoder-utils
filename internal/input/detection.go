@@ -39,7 +39,7 @@ func DetectCodeOnImage(img image.Image, sizeOverride int) (image.Image, error) {
 		newDimensions = sizeOverride
 	}
 
-	log.Printf("Converting to QR %dx%d ", newDimensions, newDimensions)
+	log.Printf("Converting to %dx%d ", newDimensions, newDimensions)
 
 	resized := resize(cropped, newDimensions)
 	return resized, nil

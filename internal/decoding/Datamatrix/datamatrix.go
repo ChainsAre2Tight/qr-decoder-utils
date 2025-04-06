@@ -33,7 +33,14 @@ func (d *datamatrix) Decode(matrix [][]bool) (string, error) {
 		bytestream[i] = val
 	}
 
-	data, err := utils.BytesToISO8859dash1(bytestream[0:separator])
+	res := make([]byte, 0, separator+1)
+	for i := range separator {
+		if bytestream[i] < 128 {
+			res = append(res, bytestream[i])
+		}
+	}
+
+	data, err := utils.BytesToISO8859dash1(res)
 	if err != nil {
 		return "", fmt.Errorf("datamatrix.Decode: %s", err)
 	}
@@ -54,7 +61,7 @@ func (d *datamatrix) Detect([][]bool) bool {
 	panic("unimplemented")
 }
 
-func DetetcDatamatrix(matrix [][]bool) (*datamatrix, bool) {
+func DetectDatamatrix(matrix [][]bool) (*datamatrix, bool) {
 	// check dimensions are even
 	if len(matrix)%2 != 0 || len(matrix[0])%2 != 0 {
 		return nil, false
@@ -73,7 +80,7 @@ func DetetcDatamatrix(matrix [][]bool) (*datamatrix, bool) {
 	}
 
 	// determine size and check timing pattern
-	// or just YOLO it
+	// ...or just YOLO it xdd
 
 	// construct datamatrix struc based on calculated parameters
 	code := NewDatamatrix(len(matrix)-2, len(matrix[0])-2)

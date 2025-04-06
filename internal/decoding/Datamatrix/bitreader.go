@@ -152,26 +152,27 @@ func (datamatrix *datamatrix) matrixToBitStream(matrix [][]bool) []bool {
 	// printarray(lock, datamatrix.X)
 	// log.Println("array")
 	// printarray(array, datamatrix.X)
-	// log.Println("result")
-	// printarray(result, 8)
 	log.Println("Reading sequence is:")
 	printarray2(sequence, datamatrix.X)
+	log.Println("Raw result:")
+	printarray(result, 8)
 
 	return result
 }
 
-// func printarray(a []bool, n int) {
-// 	for row := range len(a) / n {
-// 		for col := range n {
-// 			if a[row*n+col] {
-// 				fmt.Print("1 ")
-// 			} else {
-// 				fmt.Print("0 ")
-// 			}
-// 		}
-// 		fmt.Print("\n")
-// 	}
-// }
+func printarray(a []bool, n int) {
+	for row := range len(a) / n {
+		fmt.Printf("row № %2d | ", row)
+		for col := range n {
+			if a[row*n+col] {
+				fmt.Print("1 ")
+			} else {
+				fmt.Print("0 ")
+			}
+		}
+		fmt.Print("| \n")
+	}
+}
 
 func printarray2(a []int, n int) {
 	for row := range len(a) / n {

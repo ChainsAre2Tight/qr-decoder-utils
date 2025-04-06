@@ -14,7 +14,7 @@ func detectCodeType(matrix [][]bool) (interfaces.CodeInterface, error) {
 		return code, nil
 	}
 
-	if code, ok := datamatrix.DetetcDatamatrix(matrix); ok {
+	if code, ok := datamatrix.DetectDatamatrix(matrix); ok {
 		return code, nil
 	}
 	return nil, fmt.Errorf("no known code types found")
