@@ -3,7 +3,6 @@
 *.xlsx
 *.gif
 *.exe
-bin/*
 
 !.gitkeep
-!cmd/e2e/data**/*
+!tests/data**/*
