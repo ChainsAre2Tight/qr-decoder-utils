@@ -11,13 +11,13 @@ import (
 func convertImage() {
 	requireInputName()
 	requireOutputName()
-	matrix := LoadAndConvert(inputFilenamePtr)
+	matrix := LoadAndConvert(inputFilenamePtr, *outputSizePtr)
 	output.MatrixToImage(matrix, *outputFilenamePtr)
 }
 
 func decode() {
 	requireInputName()
-	matrix := LoadAndConvert(inputFilenamePtr)
+	matrix := LoadAndConvert(inputFilenamePtr, *outputSizePtr)
 
 	data, err := decoding.Decode(matrix)
 	if err != nil {
@@ -37,7 +37,7 @@ func convertExcel() {
 		outputFunction = output.MatrixToExcel
 	}
 
-	matrix := LoadAndConvert(inputFilenamePtr)
+	matrix := LoadAndConvert(inputFilenamePtr, *outputSizePtr)
 
 	// output to selected format
 	outputFunction(matrix, *outputFilenamePtr)
