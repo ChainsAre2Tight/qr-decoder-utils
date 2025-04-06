@@ -20,14 +20,28 @@ func NewDatamatrix(X, Y int) *datamatrix {
 // Decode implements interfaces.CodeInterface.
 func (d *datamatrix) Decode(matrix [][]bool) (string, error) {
 	stream := d.matrixToBitStream(matrix)
-	fmt.Println(stream)
+
+	bytestream := make([]byte, len(stream)/8)
+
+	separator := len(bytestream) // separates data and CRC
 
 	for i := range len(stream) / 8 {
-		chr := byte(utils.BoolSliceToDecimal(stream[8*i:8*i+1]) - 1)
-
-		fmt.Println(chr)
+		val := byte(utils.BoolSliceToDecimal(stream[8*i:8*(i+1)]) - 1)
+		if val == 128 {
+			separator = i
+		}
+		bytestream[i] = val
 	}
-	return "", nil
+
+	data, err := utils.BytesToISO8859dash1(bytestream[0:separator])
+	if err != nil {
+		return "", fmt.Errorf("datamatrix.Decode: %s", err)
+	}
+
+	// TODO: use CRC
+	// crc := bytestream[separator:len(bytestream)]
+
+	return data, nil
 }
 
 // Description implements interfaces.CodeInterface.
