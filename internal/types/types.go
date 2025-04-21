@@ -4,6 +4,8 @@ type Point struct {
 	X, Y int
 }
 
+type Matrix [][]bool
+
 func NewPoint(x, y int) Point {
 	return Point{X: x, Y: y}
 }

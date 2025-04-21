@@ -5,6 +5,7 @@ import (
 
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding"
 	qr "github.com/ChainsAre2Tight/qr-decoder-utils/internal/decoding/QR"
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/encoding"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/output"
 )
 
@@ -59,4 +60,14 @@ func mask() {
 	result := qr.GenerateMaskedMatrix(*outputSizePtr, mask)
 
 	output.MatrixToExcel(result, *outputFilenamePtr)
+}
+
+func encode() {
+	requireInputName()
+	requireCodeType()
+	requireOutputName()
+
+	result := encoding.Encode()
+
+	output.MatrixToImage(result, *outputFilenamePtr)
 }

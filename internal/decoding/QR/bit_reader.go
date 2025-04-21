@@ -1,6 +1,7 @@
 package qr
 
 import (
+	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/types"
 	"github.com/ChainsAre2Tight/qr-decoder-utils/internal/utils"
 )
 
@@ -131,4 +132,17 @@ func (r *bitReader) readMultiple(n int) []bool {
 func (r *bitReader) readBytes() byte {
 	raw := r.readMultiple(8)
 	return byte(utils.BoolSliceToDecimal(raw))
+}
+
+func (r *bitReader) writeOne(val bool) {
+	x := r.sequence[r.position][0]
+	y := r.sequence[r.position][1]
+	r.matrix[x][y] = r.mask.At(types.NewPoint(x, y)) != val
+	r.position++
+}
+
+func (r *bitReader) Write(data []bool) {
+	for _, val := range data {
+		r.writeOne(val)
+	}
 }

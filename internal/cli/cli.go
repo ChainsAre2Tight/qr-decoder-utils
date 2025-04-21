@@ -12,6 +12,7 @@ var (
 	includeMasksPtr   *bool
 	outputSizePtr     *int
 	maskPtr           *string
+	codePtr           *string
 )
 
 func init() {
@@ -20,6 +21,7 @@ func init() {
 	includeMasksPtr = flag.Bool("include-masks", false, "include all known masks as additional sheets")
 	maskPtr = flag.String("mask", "None", "specifies mask. [000-111]")
 	outputSizePtr = flag.Int("size", 0, "specifies output matrix size [1-100]")
+	codePtr = flag.String("code", "qr", "specifies code type. [qr | microqr | datamatrix]")
 }
 
 func CLI() {
@@ -43,6 +45,8 @@ func CLI() {
 		mask()
 	case "decode":
 		decode()
+	case "encode":
+		encode()
 	default:
 		log.Printf("Unknown master mode: %s", masterModePtr)
 		printUsage()

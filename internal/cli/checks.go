@@ -8,7 +8,14 @@ import (
 
 func requireInputName() {
 	if *inputFilenamePtr == "" {
-		log.Print("Input filename not specified")
+		log.Print("Input not specified")
+		printUsage()
+	}
+}
+
+func requireCodeType() {
+	if *codePtr == "" {
+		log.Println("Code type not specififed")
 		printUsage()
 	}
 }

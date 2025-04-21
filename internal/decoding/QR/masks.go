@@ -7,6 +7,7 @@ import (
 type maskInterface interface {
 	// returns value of a maks at [x][y]
 	At(types.Point) bool
+	Indicator() []bool
 }
 
 type Mask000 struct{}
@@ -77,4 +78,36 @@ func (Mask110) At(point types.Point) bool {
 
 func (Mask111) At(point types.Point) bool {
 	return ((point.X+point.Y)%2+(point.X*point.Y)%3)%2 == 0
+}
+
+func (Mask000) Indicator() []bool {
+	return []bool{false, false, false}
+}
+
+func (Mask001) Indicator() []bool {
+	return []bool{false, false, true}
+}
+
+func (Mask010) Indicator() []bool {
+	return []bool{false, true, false}
+}
+
+func (Mask011) Indicator() []bool {
+	return []bool{false, true, true}
+}
+
+func (Mask100) Indicator() []bool {
+	return []bool{true, false, false}
+}
+
+func (Mask101) Indicator() []bool {
+	return []bool{true, false, true}
+}
+
+func (Mask110) Indicator() []bool {
+	return []bool{true, true, false}
+}
+
+func (Mask111) Indicator() []bool {
+	return []bool{true, true, true}
 }

@@ -33,6 +33,14 @@ func IsSubmatrix(matA, matB [][]bool, start types.Point) bool {
 	return true
 }
 
+func WriteSubmatrix(target, data types.Matrix, start *types.Point) {
+	for x := range data {
+		for y := range data[x] {
+			target[x+start.X][y+start.Y] = data[x][y]
+		}
+	}
+}
+
 func ReadMatrixRow(matrix [][]bool, row, start, end int) ([]bool, error) {
 	if start > end || row >= len(matrix[0]) || end > len(matrix) {
 		return []bool{}, fmt.Errorf("invalid start and end positions")
