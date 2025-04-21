@@ -71,5 +71,6 @@ func placeModeData(matrix types.Matrix, mode fec.Mode, mask maskInterface) error
 	}
 
 	// upper left
+
 	// lower right
 }
